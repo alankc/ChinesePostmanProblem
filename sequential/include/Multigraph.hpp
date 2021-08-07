@@ -23,21 +23,26 @@ typedef struct _Edge_t
 class Multigraph
 {
 private:
+    vector<Vertex_t> vertices;
+    vector<vector<uint32_t>> neighbors;
     vector<vector<double>> adjacencyMatrix;
-    vector<uint32_t> neighbors;
 
+    
 public:
     Multigraph(/* args */);
+    Multigraph(uint32_t v);
     ~Multigraph();
     void addVertex(Vertex_t &vertex);
     void addEdge(Edge_t &edge);
-    void addVertices(vector<Vertex_t> &vertices);
+    void addEdge(uint32_t from, uint32_t to);
+    void addVertices(vector<Vertex_t> &newVertices);
     void addEdges(vector<Edge_t> &edges);
     vector<vector<double>> *getAdjacencyMatrix();
-    vector<uint32_t> *getNeighbors;
+    vector<vector<uint32_t>> *getNeighbors();
     bool isEulerian(vector<uint32_t> &oddVertices);
     bool dijkstra(vector<uint32_t> &outputPath, double &distance);
     bool hierholzer(vector<uint32_t> &outputPath, double &distance);
+    void print();
 };
 
 #endif
