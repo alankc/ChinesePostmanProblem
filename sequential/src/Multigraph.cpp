@@ -1,5 +1,9 @@
 #include "../include/Multigraph.hpp"
 #include <limits>
+#include <queue>
+#include <iostream>
+
+using namespace std;
 
 Multigraph::Multigraph(/* args */)
 {
@@ -116,16 +120,27 @@ bool Multigraph::isEulerian(vector<uint32_t> &oddVertices)
     return tst;
 }
 
+typedef pair<double, uint32_t> pq_pair;
 bool Multigraph::dijkstra(vector<uint32_t> &outputPath, double &distance)
 {
+    priority_queue<pq_pair, vector<pq_pair>, greater<pq_pair>> pq;
+
+    for (uint32_t i = 10; i > 0; i--)
+        pq.push(make_pair(i*3.15, i));
+
+    while(!pq.empty())
+    {
+        auto a = pq.top();
+        pq.pop();
+        cout << a.first << " - " << a.second << endl;
+    }    
 }
 
 bool Multigraph::hierholzer(vector<uint32_t> &outputPath, double &distance)
 {
 }
 
-#include <iostream>
-using namespace std;
+
 void Multigraph::print()
 {
     cout << "========================================\n";

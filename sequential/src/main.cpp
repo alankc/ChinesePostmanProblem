@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     Multigraph mg;
     Vertex_t v;
@@ -42,12 +42,16 @@ int main(int argc, char* argv[])
     e.to = 3;
     mg.addEdge(e);
 
-
     mg.print();
 
     vector<uint32_t> ods;
     cout << "É euleriano? " << mg.isEulerian(ods) << endl;
     for (auto v : ods)
         cout << v << "\t " << endl;
+
+    vector<uint32_t> outputPath;
+    double distance;
+    mg.dijkstra(outputPath, distance);
+
     return 0;
 }
