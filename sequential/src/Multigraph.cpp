@@ -2,6 +2,7 @@
 #include <limits>
 #include <queue>
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -206,7 +207,10 @@ void Multigraph::print()
     {
         for (auto &e : line)
         {
-            cout << e << "\t";
+            if (e != Multigraph::INFINITY)
+                cout << std::setw(10) << e << " ";
+                else
+                cout << std::setw(10) << "inf" << " ";
         }
         cout << "\n";
     }
