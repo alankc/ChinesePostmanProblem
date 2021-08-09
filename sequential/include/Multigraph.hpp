@@ -42,7 +42,7 @@ public:
     vector<vector<uint32_t>> *getNeighbors();
     bool isEulerian(vector<uint32_t> &oddVertices);
     bool dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance);
-    bool hierholzer(vector<uint32_t> &outputPath, uint64_t &distance);
+    bool hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance);
     void print();
 };
 

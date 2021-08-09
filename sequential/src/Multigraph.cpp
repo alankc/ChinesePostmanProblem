@@ -175,7 +175,7 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
     return false;
 }
 
-bool Multigraph::hierholzer(vector<uint32_t> &outputPath, uint64_t &distance)
+bool Multigraph::hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance)
 {
 
     return false;
