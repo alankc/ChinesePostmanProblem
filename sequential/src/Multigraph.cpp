@@ -5,6 +5,8 @@
 
 using namespace std;
 
+const double Multigraph::INFINITY = numeric_limits<double>::max() / 2.0;
+
 Multigraph::Multigraph(/* args */)
 {
 }
@@ -15,7 +17,7 @@ Multigraph::Multigraph(uint32_t v)
     adjacencyMatrix.resize(v);
     for (uint32_t i = 0; i < v; i++)
     {
-        adjacencyMatrix[i].resize(v, numeric_limits<double>::max());
+        adjacencyMatrix[i].resize(v, Multigraph::INFINITY);
         adjacencyMatrix[i][i] = 0.0;
     }
 
@@ -37,10 +39,10 @@ void Multigraph::addVertex(Vertex_t &vertex)
     adjacencyMatrix.resize(newSize);
 
     for (uint32_t i = 0; i < last; i++)
-        adjacencyMatrix[i].push_back(numeric_limits<double>::max());
+        adjacencyMatrix[i].push_back(Multigraph::INFINITY);
 
     //resizing and putting infinity value in the last line
-    adjacencyMatrix[last].resize(newSize, numeric_limits<double>::max());
+    adjacencyMatrix[last].resize(newSize, Multigraph::INFINITY);
     adjacencyMatrix[last][last] = 0;
 
     //resize neighbors matrix due to new vertex
@@ -73,11 +75,11 @@ void Multigraph::addVertices(vector<Vertex_t> &newVertices)
     adjacencyMatrix.resize(newSize);
 
     for (uint32_t i = 0; i < last; i++)
-        adjacencyMatrix[i].resize(newSize, numeric_limits<double>::max());
+        adjacencyMatrix[i].resize(newSize, Multigraph::INFINITY);
 
     for (uint32_t i = last; i < newSize; i++)
     {
-        adjacencyMatrix[i].resize(newSize, numeric_limits<double>::max());
+        adjacencyMatrix[i].resize(newSize, Multigraph::INFINITY);
         adjacencyMatrix[i][i] = 0.0;
     }
 
@@ -120,26 +122,63 @@ bool Multigraph::isEulerian(vector<uint32_t> &oddVertices)
     return tst;
 }
 
+//first is cost, second is id vertex
 typedef pair<double, uint32_t> pq_pair;
-bool Multigraph::dijkstra(vector<uint32_t> &outputPath, double &distance)
+bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, double &totalDistance)
 {
     priority_queue<pq_pair, vector<pq_pair>, greater<pq_pair>> pq;
 
-    for (uint32_t i = 10; i > 0; i--)
-        pq.push(make_pair(i*3.15, i));
+    vector<double> distance(vertices.size(), Multigraph::INFINITY);
+    vector<int64_t> ancester(vertices.size(), -1);
+    vector<bool> visited(vertices.size(), false);
 
-    while(!pq.empty())
+    distance[start] = 0.0;
+
+    pq.push(make_pair(0.0, start));
+
+    while (!pq.empty())
     {
-        auto a = pq.top();
+        pq_pair best;
+        best = pq.top();
         pq.pop();
-        cout << a.first << " - " << a.second << endl;
-    }    
+
+        if (best.first == distance[best.second])
+        {
+            if (best.second == end)
+            {
+                uint32_t curr = end;
+                totalDistance = 0;
+                while (curr != start)
+                {
+                    outputPath.push_front(curr);
+                    totalDistance += adjacencyMatrix[curr][ancester[curr]];
+                    curr = ancester[curr];
+                }
+                outputPath.push_front(start);
+                return true;
+            }
+
+            for (auto n : neighbors[best.second])
+            {
+                double tempDist = distance[best.second] + adjacencyMatrix[best.second][n];
+
+                if (tempDist < distance[n])
+                {
+                    distance[n] = tempDist;
+                    ancester[n] = best.second;
+                    pq.push(make_pair(tempDist, n));
+                }
+            }
+        }
+    }
+    return false;
 }
 
 bool Multigraph::hierholzer(vector<uint32_t> &outputPath, double &distance)
 {
-}
 
+    return false;
+}
 
 void Multigraph::print()
 {

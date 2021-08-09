@@ -2,6 +2,7 @@
 #define MULTIGRAPH_HPP
 
 #include <vector>
+#include <list>
 #include <cstdint>
 
 using namespace std;
@@ -26,7 +27,7 @@ private:
     vector<Vertex_t> vertices;
     vector<vector<uint32_t>> neighbors;
     vector<vector<double>> adjacencyMatrix;
-
+    const static double INFINITY;
     
 public:
     Multigraph(/* args */);
@@ -40,7 +41,7 @@ public:
     vector<vector<double>> *getAdjacencyMatrix();
     vector<vector<uint32_t>> *getNeighbors();
     bool isEulerian(vector<uint32_t> &oddVertices);
-    bool dijkstra(vector<uint32_t> &outputPath, double &distance);
+    bool dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, double &totalDistance);
     bool hierholzer(vector<uint32_t> &outputPath, double &distance);
     void print();
 };
