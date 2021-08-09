@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const double Multigraph::INFINITY = numeric_limits<double>::max() / 2.0;
+const uint32_t Multigraph::INFINITY = numeric_limits<uint32_t>::max() / 4;
 
 Multigraph::Multigraph(/* args */)
 {
@@ -98,7 +98,7 @@ void Multigraph::addEdges(vector<Edge_t> &edges)
     }
 }
 
-vector<vector<double>> *Multigraph::getAdjacencyMatrix()
+vector<vector<uint32_t>> *Multigraph::getAdjacencyMatrix()
 {
     return &adjacencyMatrix;
 }
@@ -123,12 +123,12 @@ bool Multigraph::isEulerian(vector<uint32_t> &oddVertices)
 }
 
 //first is cost, second is id vertex
-typedef pair<double, uint32_t> pq_pair;
-bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, double &totalDistance)
+typedef pair<uint32_t, uint32_t> pq_pair;
+bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance)
 {
     priority_queue<pq_pair, vector<pq_pair>, greater<pq_pair>> pq;
 
-    vector<double> distance(vertices.size(), Multigraph::INFINITY);
+    vector<uint64_t> distance(vertices.size(), Multigraph::INFINITY);
     vector<int64_t> ancester(vertices.size(), -1);
     vector<bool> visited(vertices.size(), false);
 
@@ -160,7 +160,7 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
 
             for (auto n : neighbors[best.second])
             {
-                double tempDist = distance[best.second] + adjacencyMatrix[best.second][n];
+                uint64_t tempDist = distance[best.second] + adjacencyMatrix[best.second][n];
 
                 if (tempDist < distance[n])
                 {
@@ -174,7 +174,7 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
     return false;
 }
 
-bool Multigraph::hierholzer(vector<uint32_t> &outputPath, double &distance)
+bool Multigraph::hierholzer(vector<uint32_t> &outputPath, uint64_t &distance)
 {
 
     return false;

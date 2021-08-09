@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
         cout << v << " ";
 
     list<uint32_t> outputPath;
-    double distance;
+    uint64_t distance;
     mg.dijkstra(0, 7, outputPath, distance);
     cout << "\nPath: ";
     for (auto a : outputPath)
