@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     mg.addEdge(e);
     e.from = 5;
     e.to = 6;
-    e.weight = 10;
+    e.weight = 1;
     mg.addEdge(e);
     e.from = 6;
     e.to = 7;
@@ -71,9 +71,9 @@ int main(int argc, char *argv[])
     mg.print();
 
     vector<uint32_t> ods;
-    cout << "É euleriano? " << mg.isEulerian(ods) << ": " << endl;
+    cout << "É euleriano? " << mg.isEulerian(ods) << ": ";
     for (auto v : ods)
-        cout << v << "\t ";
+        cout << v << " ";
 
     list<uint32_t> outputPath;
     double distance;
