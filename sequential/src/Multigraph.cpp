@@ -3,6 +3,8 @@
 #include <queue>
 #include <iostream>
 #include <iomanip>
+#include <stack>
+#include <algorithm>
 
 using namespace std;
 
@@ -177,8 +179,32 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
 
 bool Multigraph::hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance)
 {
+    vector<vector<uint32_t>> n(neighbors);
 
-    return false;
+    stack<uint32_t> tempEulerPath;
+
+    tempEulerPath.push(start);
+    distance = 0;
+    while (!tempEulerPath.empty())
+    {
+        uint32_t u = tempEulerPath.top();
+
+        if (n[u].size() == 0)
+        {
+            tempEulerPath.pop();
+            outputPath.push_front(u);
+        }
+        else
+        {
+            uint32_t v = *n[u].begin();
+            distance += adjacencyMatrix[u][v];
+            tempEulerPath.push(v);
+            n[u].erase(n[u].begin());
+            auto it = find(n[v].begin(), n[v].end(), u);
+            n[v].erase(it);
+        }
+    }
+    return true;
 }
 
 void Multigraph::print()
@@ -209,8 +235,9 @@ void Multigraph::print()
         {
             if (e != Multigraph::INFINITY)
                 cout << std::setw(10) << e << " ";
-                else
-                cout << std::setw(10) << "inf" << " ";
+            else
+                cout << std::setw(10) << "inf"
+                     << " ";
         }
         cout << "\n";
     }
