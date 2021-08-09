@@ -56,14 +56,14 @@ void Multigraph::addEdge(Edge_t &edge)
 {
     adjacencyMatrix[edge.from][edge.to] = edge.weight;
     adjacencyMatrix[edge.to][edge.from] = edge.weight;
-    neighbors[edge.from].push_back(edge.to);
-    neighbors[edge.to].push_back(edge.from);
+    neighbors[edge.from].insert(edge.to);
+    neighbors[edge.to].insert(edge.from);
 }
 
 void Multigraph::addEdge(uint32_t from, uint32_t to)
 {
-    neighbors[from].push_back(to);
-    neighbors[to].push_back(from);
+    neighbors[from].insert(to);
+    neighbors[to].insert(from);
 }
 
 void Multigraph::addVertices(vector<Vertex_t> &newVertices)
@@ -96,8 +96,8 @@ void Multigraph::addEdges(vector<Edge_t> &edges)
     {
         adjacencyMatrix[edge.from][edge.to] = edge.weight;
         adjacencyMatrix[edge.to][edge.from] = edge.weight;
-        neighbors[edge.from].push_back(edge.to);
-        neighbors[edge.to].push_back(edge.from);
+        neighbors[edge.from].insert(edge.to);
+        neighbors[edge.to].insert(edge.from);
     }
 }
 
@@ -106,7 +106,7 @@ vector<vector<uint32_t>> *Multigraph::getAdjacencyMatrix()
     return &adjacencyMatrix;
 }
 
-vector<vector<uint32_t>> *Multigraph::getNeighbors()
+vector<unordered_multiset<uint32_t>> *Multigraph::getNeighbors()
 {
     return &neighbors;
 }
@@ -179,7 +179,7 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
 
 bool Multigraph::hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance)
 {
-    vector<vector<uint32_t>> n(neighbors);
+    vector<unordered_multiset<uint32_t>> n(neighbors);
 
     stack<uint32_t> tempEulerPath;
 
@@ -200,8 +200,7 @@ bool Multigraph::hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t
             distance += adjacencyMatrix[u][v];
             tempEulerPath.push(v);
             n[u].erase(n[u].begin());
-            auto it = find(n[v].begin(), n[v].end(), u);
-            n[v].erase(it);
+            n[v].erase(n[v].find(u));
         }
     }
     return true;

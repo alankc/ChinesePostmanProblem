@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unordered_set>
 
 #include "../include/Multigraph.hpp"
 
@@ -66,10 +67,11 @@ int main(int argc, char *argv[])
     e.weight = 10;
     mg.addEdge(e);
     mg.addEdge(e);
-    /*e.from = 5;
+    e.from = 5;
     e.to = 7;
     e.weight = 1;
-    mg.addEdge(e);*/
+    mg.addEdge(e);
+    mg.addEdge(e);
 
     mg.print();
 
@@ -80,7 +82,7 @@ int main(int argc, char *argv[])
 
     list<uint32_t> outputPath;
     uint64_t distance;
-    mg.dijkstra(0, 6, outputPath, distance);
+    mg.dijkstra(0, 7, outputPath, distance);
     cout << "\nPath D: ";
     for (auto a : outputPath)
         cout << a << " ";

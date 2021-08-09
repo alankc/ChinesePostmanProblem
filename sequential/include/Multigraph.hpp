@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include <cstdint>
+#include <unordered_set>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ class Multigraph
 {
 private:
     vector<Vertex_t> vertices;
-    vector<vector<uint32_t>> neighbors;
+    vector<unordered_multiset<uint32_t>> neighbors;
     vector<vector<uint32_t>> adjacencyMatrix;
     const static uint32_t INFINITY;
     
@@ -39,7 +40,7 @@ public:
     void addVertices(vector<Vertex_t> &newVertices);
     void addEdges(vector<Edge_t> &edges);
     vector<vector<uint32_t>> *getAdjacencyMatrix();
-    vector<vector<uint32_t>> *getNeighbors();
+    vector<unordered_multiset<uint32_t>> *getNeighbors();
     bool isEulerian(vector<uint32_t> &oddVertices);
     bool dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance);
     bool hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance);
