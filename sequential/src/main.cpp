@@ -38,7 +38,8 @@ vector<vector<pair<uint32_t, uint32_t>>> teste(vector<uint32_t> odd)
     else
     {
         auto odd_i = odd;
-        auto i_it = min(odd_i.begin(), odd_i.end());
+        //auto i_it = min(odd_i.begin(), odd_i.end());
+        auto i_it = odd_i.begin();
         uint32_t first = *i_it;
         odd_i.erase(i_it);
 
