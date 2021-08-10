@@ -64,19 +64,16 @@ vector<vector<pair<uint32_t, uint32_t>>> teste(vector<uint32_t> odd)
 int main(int argc, char *argv[])
 {
     vector<uint32_t> odd;
-    odd.push_back(0);
-    odd.push_back(1);
-    odd.push_back(2);
-    odd.push_back(3);
-    odd.push_back(4);
-    odd.push_back(5);
+    for (uint32_t i = 0; i < atoi(argv[1]); i++)
+        odd.push_back(i);
 
     vector<pair<uint32_t, uint32_t>> buffer;
     auto return_teste = teste(odd);
 
     uint32_t i = 1;
     for (auto t : return_teste)
-    {   cout << std::setw(3) << i++ << "--";
+    {
+        cout << std::setw(3) << i++ << "--";
         for (auto q : t)
         {
             cout << "(" << q.first << "," << q.second << ")";
