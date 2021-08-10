@@ -62,6 +62,39 @@ vector<vector<pair<uint32_t, uint32_t>>> teste(vector<uint32_t> odd)
     return final;
 }
 
+vector<vector<pair<uint32_t, uint32_t>>> teste2(vector<uint32_t> odd)
+{
+    vector<vector<pair<uint32_t, uint32_t>>> final;
+    if (odd.size() == 2)
+    {
+        vector<pair<uint32_t, uint32_t>> buffer;
+        buffer.push_back(make_pair(odd[0], odd[1]));
+        final.push_back(buffer);
+    }
+    else
+    {
+        uint32_t first = *odd.begin();
+        odd.erase(odd.begin());
+
+        for (uint32_t i = 0; i < odd.size(); i++)
+        {
+            auto odd_j = odd;
+            uint32_t second = odd[i];
+            odd_j.erase(odd_j.begin() + i);
+
+            auto final_tmp = teste(odd_j);
+            for (auto &el : final_tmp)
+            {
+                vector<pair<uint32_t, uint32_t>> buffer;
+                buffer.push_back(make_pair(first, second));
+                copy(el.begin(), el.end(), back_inserter(buffer));
+                final.push_back(buffer);
+            }
+        }
+    }
+    return final;
+}
+
 int main(int argc, char *argv[])
 {
     vector<uint32_t> odd;
@@ -69,7 +102,7 @@ int main(int argc, char *argv[])
         odd.push_back(i);
 
     vector<pair<uint32_t, uint32_t>> buffer;
-    auto return_teste = teste(odd);
+    auto return_teste = teste2(odd);
 
     uint32_t i = 1;
     for (auto t : return_teste)
