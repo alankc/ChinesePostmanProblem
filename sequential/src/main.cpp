@@ -1,12 +1,91 @@
 #include <iostream>
 #include <unordered_set>
-
+#include <iomanip>
 #include "../include/Multigraph.hpp"
+#include "../include/ChinesePostmanProblem.hpp"
 
 using namespace std;
+/*
+private static ObjectArrayList<ObjectArrayList<IntArrayList>> getOddVertexCombinations(IntArrayList oddVertices,
+                                                                                       ObjectArrayList<IntArrayList> buffer){
+    ObjectArrayList<ObjectArrayList<IntArrayList>> toReturn = new ObjectArrayList<>();
+    if (oddVertices.isEmpty()) {
+        toReturn.add(buffer.clone());
+    } else {
+        int first = oddVertices.removeInt(0);
+        for (int c = 0; c < oddVertices.size(); c++) {
+            int second = oddVertices.removeInt(c);
+            buffer.add(new IntArrayList(new int[]{first, second}));
+            toReturn.addAll(getOddVertexCombinations(oddVertices, buffer));
+            buffer.pop();
+            oddVertices.add(c, second);
+        }
+        oddVertices.add(0, first);
+    }
+    return toReturn;
+}
+*/
+
+vector<vector<pair<uint32_t, uint32_t>>> teste(vector<uint32_t> odd)
+{
+    vector<vector<pair<uint32_t, uint32_t>>> final;
+    if (odd.size() == 2)
+    {
+        vector<pair<uint32_t, uint32_t>> buffer;
+        buffer.push_back(make_pair(odd[0], odd[1]));
+        final.push_back(buffer);
+    }
+    else
+    {
+        auto odd_i = odd;
+        auto i_it = min(odd_i.begin(), odd_i.end());
+        uint32_t first = *i_it;
+        odd_i.erase(i_it);
+
+        for (uint32_t i = 0; i < odd_i.size(); i++)
+        {
+            auto odd_j = odd_i;
+            uint32_t second = odd_i[i];
+            odd_j.erase(odd_j.begin() + i);
+
+            auto final_tmp = teste(odd_j);
+            for (auto &el : final_tmp)
+            {
+                vector<pair<uint32_t, uint32_t>> buffer;
+                buffer.push_back(make_pair(first, second));
+                copy(el.begin(), el.end(), back_inserter(buffer));
+                final.push_back(buffer);
+            }
+        }
+    }
+    return final;
+}
 
 int main(int argc, char *argv[])
 {
+    vector<uint32_t> odd;
+    odd.push_back(0);
+    odd.push_back(1);
+    odd.push_back(2);
+    odd.push_back(3);
+    odd.push_back(4);
+    odd.push_back(5);
+
+    vector<pair<uint32_t, uint32_t>> buffer;
+    auto return_teste = teste(odd);
+
+    uint32_t i = 1;
+    for (auto t : return_teste)
+    {   cout << std::setw(3) << i++ << "--";
+        for (auto q : t)
+        {
+            cout << "(" << q.first << "," << q.second << ")";
+        }
+        cout << endl;
+    }
+
+    return 0;
+
     Multigraph mg;
     Vertex_t v;
     v.id = 0;
@@ -96,6 +175,40 @@ int main(int argc, char *argv[])
     for (auto a : outputPath)
         cout << a << " ";
     cout << "\nDistance: " << distance << endl;
+
+    list<uint32_t> oddVertices;
+    oddVertices.push_back(5);
+    oddVertices.push_back(7);
+    oddVertices.push_back(4);
+    oddVertices.push_back(6);
+
+    vector<OddPair> oddPairs;
+
+    auto it_i = oddVertices.begin();
+    while (it_i != oddVertices.end())
+    {
+        auto it_j = it_i;
+        it_j++;
+        while (it_j != oddVertices.end())
+        {
+            OddPair op;
+            op.u = *it_i;
+            op.v = *it_j;
+            mg.dijkstra(op.u, op.v, op.path, op.distance);
+            oddPairs.push_back(op);
+            it_j++;
+        }
+        it_i++;
+    }
+
+    for (auto a : oddPairs)
+    {
+        cout << a.u << "," << a.v << " d:" << a.distance << " p:";
+        for (auto p : a.path)
+            cout << p << " ";
+
+        cout << endl;
+    }
 
     return 0;
 }
