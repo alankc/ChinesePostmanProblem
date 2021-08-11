@@ -97,11 +97,12 @@ vector<vector<pair<uint32_t, uint32_t>>> teste2(vector<uint32_t> odd)
 
 int main(int argc, char *argv[])
 {
+    ChinesePostmanProblem cpp;
     vector<uint32_t> odd;
     for (uint32_t i = 0; i < atoi(argv[1]); i++)
         odd.push_back(i);
 
-    vector<pair<uint32_t, uint32_t>> buffer;
+    
     auto return_teste = teste2(odd);
 
     uint32_t i = 1;

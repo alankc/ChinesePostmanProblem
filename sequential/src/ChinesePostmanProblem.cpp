@@ -8,7 +8,7 @@ ChinesePostmanProblem::~ChinesePostmanProblem()
 {
 }
 
-void ChinesePostmanProblem::listPairs(list<uint32_t> &oddVertices, vector<OddPair> &oddPairs)
+void ChinesePostmanProblem::listPairs(vector<uint32_t> &oddVertices, vector<OddPair> &oddPairs)
 {
     auto it_i = oddVertices.begin();
     while (it_i != oddVertices.end())
@@ -28,8 +28,37 @@ void ChinesePostmanProblem::listPairs(list<uint32_t> &oddVertices, vector<OddPai
     }
 }
 
-void ChinesePostmanProblem::listPairsCombinations()
+vector<vector<pair<uint32_t, uint32_t>>> ChinesePostmanProblem::listPairsCombinations(vector<uint32_t> &oddVertices)
 {
+    vector<vector<pair<uint32_t, uint32_t>>> final;
+    if (oddVertices.size() == 2)
+    {
+        vector<pair<uint32_t, uint32_t>> buffer;
+        buffer.push_back(make_pair(oddVertices[0], oddVertices[1]));
+        final.push_back(buffer);
+    }
+    else
+    {
+        uint32_t first = *oddVertices.begin();
+        oddVertices.erase(oddVertices.begin());
+
+        for (uint32_t i = 0; i < oddVertices.size(); i++)
+        {
+            auto odd_j = oddVertices;
+            uint32_t second = oddVertices[i];
+            odd_j.erase(odd_j.begin() + i);
+
+            auto final_tmp = listPairsCombinations(odd_j);
+            for (auto &el : final_tmp)
+            {
+                vector<pair<uint32_t, uint32_t>> buffer;
+                buffer.push_back(make_pair(first, second));
+                copy(el.begin(), el.end(), back_inserter(buffer));
+                final.push_back(buffer);
+            }
+        }
+    }
+    return final;
 }
 
 void ChinesePostmanProblem::bestPairsCombination()

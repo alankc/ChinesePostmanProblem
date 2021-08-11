@@ -16,8 +16,8 @@ class ChinesePostmanProblem
 {
 private:
     Multigraph *mg;
-    void listPairs(list<uint32_t> &oddVertices, vector<OddPair> &oddPairs);
-    void listPairsCombinations();
+    void listPairs(vector<uint32_t> &oddVertices, vector<OddPair> &oddPairs);
+    vector<vector<pair<uint32_t, uint32_t>>> listPairsCombinations(vector<uint32_t> &oddVertices);
     void bestPairsCombination();
     void modifyGraph();
     void totalDistance();
