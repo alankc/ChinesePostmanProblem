@@ -1,25 +1,18 @@
 #ifndef CHINESE_POSTMAN_HPP
 #define CHINESE_POSTMAN_HPP
 
+#include <map>
+
 #include "Multigraph.hpp"
-
-typedef struct _OddPair
-{
-    uint32_t u;
-    uint32_t v;
-    uint64_t distance;
-    list<uint32_t> path;
-}OddPair;
-
 
 class ChinesePostmanProblem
 {
 private:
     Multigraph *mg;
-    void listPairs(vector<uint32_t> &oddVertices, vector<OddPair> &oddPairs);
+    void listPairs(vector<uint32_t> &oddVertices, vector<vector<uint64_t>> &distances, map<pair<uint32_t, uint32_t>, list<uint32_t>> &paths);
     vector<vector<pair<uint32_t, uint32_t>>> listPairsCombinations(vector<uint32_t> &oddVertices);
-    void bestPairsCombination();
-    void modifyGraph();
+    vector<pair<uint32_t, uint32_t>> bestPairsCombination(vector<vector<pair<uint32_t, uint32_t>>> &pairCombinations, vector<vector<uint64_t>> &distances);
+    void modifyGraph(vector<pair<uint32_t, uint32_t>> &bestPairs, map<pair<uint32_t, uint32_t>, list<uint32_t>> &paths);
     void totalDistance();
     void computeEulerianCicle();
 

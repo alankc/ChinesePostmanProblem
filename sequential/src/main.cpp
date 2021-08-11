@@ -208,39 +208,5 @@ int main(int argc, char *argv[])
         cout << a << " ";
     cout << "\nDistance: " << distance << endl;
 
-    list<uint32_t> oddVertices;
-    oddVertices.push_back(5);
-    oddVertices.push_back(7);
-    oddVertices.push_back(4);
-    oddVertices.push_back(6);
-
-    vector<OddPair> oddPairs;
-
-    auto it_i = oddVertices.begin();
-    while (it_i != oddVertices.end())
-    {
-        auto it_j = it_i;
-        it_j++;
-        while (it_j != oddVertices.end())
-        {
-            OddPair op;
-            op.u = *it_i;
-            op.v = *it_j;
-            mg.dijkstra(op.u, op.v, op.path, op.distance);
-            oddPairs.push_back(op);
-            it_j++;
-        }
-        it_i++;
-    }
-
-    for (auto a : oddPairs)
-    {
-        cout << a.u << "," << a.v << " d:" << a.distance << " p:";
-        for (auto p : a.path)
-            cout << p << " ";
-
-        cout << endl;
-    }
-
     return 0;
 }

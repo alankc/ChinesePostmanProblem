@@ -28,7 +28,6 @@ private:
     vector<Vertex_t> vertices;
     vector<unordered_multiset<uint32_t>> neighbors;
     vector<vector<uint32_t>> adjacencyMatrix;
-    const static uint32_t INFINITY;
     
 public:
     Multigraph(/* args */);
@@ -45,6 +44,8 @@ public:
     bool dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance);
     bool hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance);
     void print();
+
+    const static uint32_t INFINITY;
 };
 
 #endif
