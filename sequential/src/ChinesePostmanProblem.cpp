@@ -1,4 +1,8 @@
+#include <numeric>
+#include <iostream>
+
 #include "../include/ChinesePostmanProblem.hpp"
+
 
 ChinesePostmanProblem::ChinesePostmanProblem(/* args */)
 {
@@ -127,25 +131,36 @@ void ChinesePostmanProblem::modifyGraph(vector<pair<uint32_t, uint32_t>> &bestPa
     }
 }
 
-void ChinesePostmanProblem::totalDistance()
+void ChinesePostmanProblem::solve(Multigraph *mg)
 {
-}
-
-void ChinesePostmanProblem::computeEulerianCicle()
-{
-}
-
-void ChinesePostmanProblem::solve()
-{
+    this->mg = mg;
     vector<uint32_t> oddVertices;
 
     if (!mg->isEulerian(oddVertices))
     {
-        /*map<pair<uint32_t, uint32_t>, PathData> paths;
-        listPairs(oddVertices, paths);*/
+        vector<vector<uint64_t>> distances; 
+        map<pair<uint32_t, uint32_t>, list<uint32_t>> paths;
+        listPairs(oddVertices, distances, paths);
+
+        vector<uint32_t> vec(oddVertices.size());
+        std::iota(vec.begin(), vec.end(), 0);
+        vector<vector<pair<uint32_t, uint32_t>>> pairs = listPairsCombinations(vec);
+
+
+        vector<pair<uint32_t, uint32_t>> bestPairs = bestPairsCombination(pairs, distances);
+
+        modifyGraph(bestPairs, paths);
     }
 
     uint64_t distance;
     list<uint32_t> path;
     mg->hierholzer(0, path, distance);
+
+    cout << "Total distance: " << distance << endl;
+    cout << "Path: ";
+    for (auto v : path)
+    {
+        cout << v << " ";
+    }
+    cout << endl;
 }

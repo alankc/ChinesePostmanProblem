@@ -97,27 +97,6 @@ vector<vector<pair<uint32_t, uint32_t>>> teste2(vector<uint32_t> odd)
 
 int main(int argc, char *argv[])
 {
-    ChinesePostmanProblem cpp;
-    vector<uint32_t> odd;
-    for (uint32_t i = 0; i < atoi(argv[1]); i++)
-        odd.push_back(i);
-
-    
-    auto return_teste = teste2(odd);
-
-    uint32_t i = 1;
-    for (auto t : return_teste)
-    {
-        cout << std::setw(3) << i++ << "--";
-        for (auto q : t)
-        {
-            cout << "(" << q.first << "," << q.second << ")";
-        }
-        cout << endl;
-    }
-
-    return 0;
-
     Multigraph mg;
     Vertex_t v;
     v.id = 0;
@@ -143,8 +122,8 @@ int main(int argc, char *argv[])
     e.to = 1;
     e.weight = 10;
     mg.addEdge(e);
-    mg.addEdge(e);
-    mg.addEdge(e);
+    //mg.addEdge(e);
+    //mg.addEdge(e);
     e.from = 0;
     e.to = 2;
     e.weight = 1;
@@ -177,16 +156,16 @@ int main(int argc, char *argv[])
     e.to = 7;
     e.weight = 10;
     mg.addEdge(e);
-    mg.addEdge(e);
+    //mg.addEdge(e);
     e.from = 5;
     e.to = 7;
     e.weight = 1;
     mg.addEdge(e);
-    mg.addEdge(e);
+    //mg.addEdge(e);
 
     mg.print();
 
-    vector<uint32_t> ods;
+    /*vector<uint32_t> ods;
     cout << "É euleriano? " << mg.isEulerian(ods) << ": ";
     for (auto v : ods)
         cout << v << " ";
@@ -206,7 +185,14 @@ int main(int argc, char *argv[])
     cout << "\nPath H: ";
     for (auto a : outputPath)
         cout << a << " ";
-    cout << "\nDistance: " << distance << endl;
+    cout << "\nDistance: " << distance << endl;*/
+
+    ChinesePostmanProblem cpp;
+    vector<uint32_t> odd1, odd2;
+    cout << "Euleriano: " << mg.isEulerian(odd1) << endl;
+    cpp.solve(&mg);
+    cout << "Euleriano: " << mg.isEulerian(odd2) << endl;
+    mg.print();
 
     return 0;
 }
