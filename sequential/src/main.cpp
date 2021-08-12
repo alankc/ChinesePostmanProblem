@@ -218,7 +218,7 @@ Multigraph generateGraph1()
 
     e.from = 1;
     e.to = 3;
-    e.weight = 1;
+    e.weight = 100;
     mg.addEdge(e);
 
     e.from = 2;

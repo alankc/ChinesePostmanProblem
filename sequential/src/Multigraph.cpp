@@ -126,14 +126,13 @@ bool Multigraph::isEulerian(vector<uint32_t> &oddVertices)
 }
 
 //first is cost, second is id vertex
-typedef pair<uint32_t, uint32_t> pq_pair;
+typedef pair<uint64_t, uint32_t> pq_pair;
 bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance)
 {
     priority_queue<pq_pair, vector<pq_pair>, greater<pq_pair>> pq;
 
     vector<uint64_t> distance(vertices.size(), Multigraph::INFINITY);
     vector<int64_t> ancester(vertices.size(), -1);
-    vector<bool> visited(vertices.size(), false);
 
     distance[start] = 0.0;
 
