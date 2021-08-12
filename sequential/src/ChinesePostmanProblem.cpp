@@ -32,9 +32,10 @@ ChinesePostmanProblem::~ChinesePostmanProblem()
     }
 }*/
 
-void ChinesePostmanProblem::listPairs(vector<uint32_t> &oddVertices, vector<vector<uint64_t>> &distances, map<pair<uint32_t, uint32_t>, list<uint32_t>> &paths)
+void ChinesePostmanProblem::listPairs(vector<uint32_t> &oddVertices, vector<vector<uint64_t>> &distances, vector<map<uint32_t, list<uint32_t>>> &paths)
 {
     distances.resize(oddVertices.size(), vector<uint64_t>(oddVertices.size(), Multigraph::INFINITY));
+    paths.resize(oddVertices.size());
 
     for (uint32_t i = 0; i < oddVertices.size() - 1; i++)
     {
@@ -52,7 +53,7 @@ void ChinesePostmanProblem::listPairs(vector<uint32_t> &oddVertices, vector<vect
             distances[i][j] = distance;
             distances[j][i] = distance;
 
-            paths.insert(make_pair(p, path));
+            paths[i].insert(make_pair(j, path));
         }
     }
 }
@@ -110,11 +111,12 @@ vector<pair<uint32_t, uint32_t>> ChinesePostmanProblem::bestPairsCombination(vec
     return min_set;
 }
 
-void ChinesePostmanProblem::modifyGraph(vector<pair<uint32_t, uint32_t>> &bestPairs, map<pair<uint32_t, uint32_t>, list<uint32_t>> &paths)
+void ChinesePostmanProblem::modifyGraph(vector<pair<uint32_t, uint32_t>> &bestPairs, vector<map<uint32_t, list<uint32_t>>> &paths)
 {
     for (auto p : bestPairs)
     {
-        auto it = paths.find(p);
+        //if something wrong, it will result in a Segmentation fault
+        auto it = paths[p.first].find(p.second);
         auto it_list = it->second.begin();
         
         uint32_t curr;
@@ -139,7 +141,7 @@ void ChinesePostmanProblem::solve(Multigraph *mg)
     if (!mg->isEulerian(oddVertices))
     {
         vector<vector<uint64_t>> distances; 
-        map<pair<uint32_t, uint32_t>, list<uint32_t>> paths;
+        vector<map<uint32_t, list<uint32_t>>> paths;
         listPairs(oddVertices, distances, paths);
 
         vector<uint32_t> vec(oddVertices.size());
