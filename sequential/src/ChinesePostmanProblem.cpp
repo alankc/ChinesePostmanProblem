@@ -133,7 +133,7 @@ void ChinesePostmanProblem::modifyGraph(vector<pair<uint32_t, uint32_t>> &bestPa
     }
 }
 
-void ChinesePostmanProblem::solve(Multigraph *mg)
+void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
 {
     this->mg = mg;
     vector<uint32_t> oddVertices;
@@ -156,7 +156,7 @@ void ChinesePostmanProblem::solve(Multigraph *mg)
 
     uint64_t distance;
     list<uint32_t> path;
-    mg->hierholzer(0, path, distance);
+    mg->hierholzer(startVertex, path, distance);
 
     cout << "Total distance: " << distance << endl;
     cout << "Path: ";

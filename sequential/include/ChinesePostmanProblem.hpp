@@ -17,7 +17,7 @@ private:
 public:
     ChinesePostmanProblem(/* args */);
     ~ChinesePostmanProblem();
-    void solve(Multigraph *mg);
+    void solve(Multigraph *mg, uint32_t startVertex);
 };
 
 #endif

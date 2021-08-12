@@ -320,8 +320,13 @@ Multigraph generateGraph2()
 
 int main(int argc, char *argv[])
 {
-
-    Multigraph mg = generateGraph0();
+    Multigraph mg;
+    if (argv[1][0] == '0')
+        mg = generateGraph0();
+    else if (argv[1][0] == '1')
+        mg = generateGraph1();
+    else if (argv[1][0] == '2')
+        mg = generateGraph2();
     /*vector<uint32_t> ods;
     cout << "É euleriano? " << mg.isEulerian(ods) << ": ";
     for (auto v : ods)
@@ -347,7 +352,7 @@ int main(int argc, char *argv[])
     ChinesePostmanProblem cpp;
     vector<uint32_t> odd1, odd2;
     cout << "Euleriano: " << mg.isEulerian(odd1) << endl;
-    cpp.solve(&mg);
+    cpp.solve(&mg, 0);
     cout << "Euleriano: " << mg.isEulerian(odd2) << endl;
     //mg.print();
 
