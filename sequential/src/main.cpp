@@ -95,7 +95,7 @@ vector<vector<pair<uint32_t, uint32_t>>> teste2(vector<uint32_t> odd)
     return final;
 }
 
-int main(int argc, char *argv[])
+Multigraph generateGraph0()
 {
     Multigraph mg;
     Vertex_t v;
@@ -114,6 +114,8 @@ int main(int argc, char *argv[])
     v.id = 6;
     mg.addVertex(v);
     v.id = 7;
+    mg.addVertex(v);
+    v.id = 8;
     mg.addVertex(v);
 
     Edge_t e;
@@ -163,8 +165,163 @@ int main(int argc, char *argv[])
     mg.addEdge(e);
     //mg.addEdge(e);
 
+    e.from = 0;
+    e.to = 8;
+    e.weight = 100;
+    mg.addEdge(e);
     mg.print();
 
+    e.from = 1;
+    e.to = 2;
+    e.weight = 100;
+    mg.addEdge(e);
+    mg.addEdge(3, 5);
+    mg.print();
+    return mg;
+}
+
+Multigraph generateGraph1()
+{
+    Multigraph mg;
+    Vertex_t v;
+    v.id = 0;
+    mg.addVertex(v);
+    v.id = 1;
+    mg.addVertex(v);
+    v.id = 2;
+    mg.addVertex(v);
+    v.id = 3;
+    mg.addVertex(v);
+    v.id = 4;
+    mg.addVertex(v);
+    v.id = 5;
+    mg.addVertex(v);
+    v.id = 6;
+    mg.addVertex(v);
+
+    Edge_t e;
+
+    e.from = 0;
+    e.to = 1;
+    e.weight = 10;
+    mg.addEdge(e);
+
+    e.from = 0;
+    e.to = 2;
+    e.weight = 10;
+    mg.addEdge(e);
+
+    e.from = 1;
+    e.to = 2;
+    e.weight = 10;
+    mg.addEdge(e);
+
+    e.from = 1;
+    e.to = 3;
+    e.weight = 1;
+    mg.addEdge(e);
+
+    e.from = 2;
+    e.to = 3;
+    e.weight = 10;
+    mg.addEdge(e);
+
+    e.from = 2;
+    e.to = 4;
+    e.weight = 10;
+    mg.addEdge(e);
+
+    e.from = 3;
+    e.to = 4;
+    e.weight = 1;
+    mg.addEdge(e);
+
+    e.from = 3;
+    e.to = 5;
+    e.weight = 10;
+    mg.addEdge(e);
+
+    e.from = 4;
+    e.to = 5;
+    e.weight = 10;
+    mg.addEdge(e);
+
+    e.from = 5;
+    e.to = 6;
+    e.weight = 1;
+    mg.addEdge(e);
+
+    mg.print();
+
+    return mg;
+}
+
+Multigraph generateGraph2()
+{
+    Multigraph mg;
+    for (uint32_t i = 0; i < 16; i++)
+    {
+        Vertex_t v;
+        v.id = i;
+        mg.addVertex(v);
+    }
+
+    for (uint32_t i = 0; i < 4; i++)
+    {
+        Edge_t e;
+        uint32_t j = 4 * i;
+
+        e.from = j;
+        e.to = j + 1;
+        e.weight = 1;
+        mg.addEdge(e);
+        e.from = j;
+        e.to = j + 2;
+        e.weight = 1;
+        mg.addEdge(e);
+        e.from = j + 1;
+        e.to = j + 2;
+        e.weight = 1;
+        mg.addEdge(e);
+        e.from = j + 1;
+        e.to = j + 3;
+        e.weight = 1;
+        mg.addEdge(e);
+        e.from = j + 2;
+        e.to = j + 3;
+        e.weight = 1;
+        mg.addEdge(e);
+    }
+
+    Edge_t e;
+    e.from = 3;
+    e.to = 4;
+    e.weight = 1;
+    mg.addEdge(e);
+    e.from = 3;
+    e.to = 8;
+    e.weight = 1;
+    mg.addEdge(e);
+    e.from = 3;
+    e.to = 12;
+    e.weight = 1;
+    mg.addEdge(e);
+
+    e.from = 7;
+    e.to = 11;
+    e.weight = 1;
+    mg.addEdge(e);
+    e.from = 11;
+    e.to = 15;
+    e.weight = 1;
+    mg.addEdge(e);
+    return mg;
+}
+
+int main(int argc, char *argv[])
+{
+
+    Multigraph mg = generateGraph1();
     /*vector<uint32_t> ods;
     cout << "É euleriano? " << mg.isEulerian(ods) << ": ";
     for (auto v : ods)
