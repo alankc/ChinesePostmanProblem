@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <stack>
 #include <algorithm>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -241,4 +243,55 @@ void Multigraph::print()
     }
 
     cout << "\n========================================" << endl;
+}
+
+void gotoLine(std::ifstream &ifs, uint32_t num)
+{
+    ifs.seekg(std::ios::beg);
+    for (uint32_t i = 0; i < num - 1; i++)
+        ifs.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+void Multigraph::readGraphFromFile(string file)
+{
+    ifstream ifs;
+    ifs.open(file, ifstream::in);
+
+    //Read number of vertices
+    string line;
+    getline(ifs, line);
+    stringstream linestream(line);
+    getline(linestream, line, ' ');
+    getline(linestream, line, ' ');
+
+    uint32_t num_ver = stol(line);
+    vertices.resize(num_ver);
+    adjacencyMatrix.resize(num_ver);
+    for (uint32_t i = 0; i < num_ver; i++)
+    {
+        adjacencyMatrix[i].resize(num_ver, Multigraph::INFINITY);
+        adjacencyMatrix[i][i] = 0.0;
+    }
+
+    neighbors.resize(num_ver);
+
+    //Go to line, start of Edges
+    gotoLine(ifs, num_ver + 3);
+
+    while (ifs.good())
+    {
+        string line;
+        getline(ifs, line);
+        stringstream linestream(line);
+
+        Edge_t e;
+        e.weight = 1;
+        
+        getline(linestream, line, ' ');
+        e.from = stoi(line) - 1;
+        getline(linestream, line, ' ');
+        e.to = stoi(line) - 1;
+
+        addEdge(e);
+    }
 }

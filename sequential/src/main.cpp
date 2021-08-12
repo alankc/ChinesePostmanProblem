@@ -321,12 +321,15 @@ Multigraph generateGraph2()
 int main(int argc, char *argv[])
 {
     Multigraph mg;
-    if (argv[1][0] == '0')
+    mg.readGraphFromFile("/home/x/Grafos/Forquilhinha.txt");
+    
+
+    /*if (argv[1][0] == '0')
         mg = generateGraph0();
     else if (argv[1][0] == '1')
         mg = generateGraph1();
     else if (argv[1][0] == '2')
-        mg = generateGraph2();
+        mg = generateGraph2();*/
     /*vector<uint32_t> ods;
     cout << "É euleriano? " << mg.isEulerian(ods) << ": ";
     for (auto v : ods)

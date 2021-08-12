@@ -44,6 +44,7 @@ public:
     bool dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance);
     bool hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance);
     void print();
+    void readGraphFromFile(string file);
 
     const static uint32_t INFINITY;
 };
