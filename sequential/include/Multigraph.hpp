@@ -42,6 +42,7 @@ public:
     vector<unordered_multiset<uint32_t>> *getNeighbors();
     bool isEulerian(vector<uint32_t> &oddVertices);
     bool dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance);
+    bool dijkstra_boost(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance);
     bool hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance);
     void print();
     void readGraphFromFile(string file);

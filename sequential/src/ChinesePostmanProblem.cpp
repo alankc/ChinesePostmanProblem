@@ -48,7 +48,7 @@ void ChinesePostmanProblem::listPairs(vector<uint32_t> &oddVertices, vector<vect
             uint64_t distance;
             list<uint32_t> path;
 
-            mg->dijkstra(oddVertices[i], oddVertices[j], path, distance);
+            mg->dijkstra_boost(oddVertices[i], oddVertices[j], path, distance);
 
             distances[i][j] = distance;
             distances[j][i] = distance;

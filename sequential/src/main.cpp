@@ -321,8 +321,9 @@ Multigraph generateGraph2()
 int main(int argc, char *argv[])
 {
     Multigraph mg;
-    mg.readGraphFromFile("/home/x/Grafos/Forquilhinha.txt");
-    
+    //mg.readGraphFromFile("/home/x/Grafos/Forquilhinha.txt");
+    mg = generateGraph2();
+    //mg.dijkstra(0,5);
 
     /*if (argv[1][0] == '0')
         mg = generateGraph0();

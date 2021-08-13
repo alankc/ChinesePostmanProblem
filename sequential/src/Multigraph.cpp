@@ -135,6 +135,7 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
 
     vector<uint64_t> distance(vertices.size(), Multigraph::INFINITY);
     vector<int64_t> ancester(vertices.size(), -1);
+    vector<bool> visited(vertices.size(), false);
 
     distance[start] = 0.0;
 
@@ -145,6 +146,7 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
         pq_pair best;
         best = pq.top();
         pq.pop();
+        visited[best.second] = true;
 
         if (best.first == distance[best.second])
         {
@@ -164,13 +166,91 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
 
             for (auto n : neighbors[best.second])
             {
-                uint64_t tempDist = distance[best.second] + adjacencyMatrix[best.second][n];
+                if (!visited[n])
+                {
+                    uint64_t tempDist = distance[best.second] + adjacencyMatrix[best.second][n];
 
+                    if (tempDist < distance[n])
+                    {
+                        distance[n] = tempDist;
+                        ancester[n] = best.second;
+                        pq.push(make_pair(tempDist, n));
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+#include <boost/heap/fibonacci_heap.hpp>
+struct node_heap
+{
+    uint64_t distance;
+    uint32_t vertex;
+    node_heap(uint64_t distance, uint32_t vertex) : distance(distance), vertex(vertex) {}
+    node_heap() {}
+};
+
+struct compare_node
+{
+    bool operator()(const node_heap &n1, const node_heap &n2) const
+    {
+        return n1.distance > n2.distance;
+    }
+};
+typedef boost::heap::fibonacci_heap<node_heap, boost::heap::compare<compare_node>> fibonacci_heap_t;
+typedef fibonacci_heap_t::handle_type handle_t;
+bool Multigraph::dijkstra_boost(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance)
+{
+    fibonacci_heap_t fh;
+    vector<uint64_t> distance(vertices.size(), Multigraph::INFINITY);
+    vector<int64_t> ancester(vertices.size(), -1);
+    vector<bool> visited(vertices.size(), false);
+    vector<handle_t> nodeHandle;
+
+    for (uint32_t i = 0; i < vertices.size(); i++)
+    {
+        node_heap nh(Multigraph::INFINITY, vertices[i].id);
+        //if (vertices[i].id == start)
+        //    nh.distance = 0;
+        nodeHandle.push_back(fh.push(nh));
+    }
+
+    fh.update(nodeHandle[start], node_heap(0, start));
+
+    distance[start] = 0;
+
+    while (!fh.empty())
+    {
+        node_heap best = fh.top();
+        fh.pop();
+        visited[best.vertex] = true;
+
+        if (best.vertex == end)
+        {
+            uint32_t curr = end;
+            totalDistance = 0;
+            while (curr != start)
+            {
+                outputPath.push_front(curr);
+                totalDistance += adjacencyMatrix[curr][ancester[curr]];
+                curr = ancester[curr];
+            }
+            outputPath.push_front(start);
+            return true;
+        }
+
+        for (auto n : neighbors[best.vertex])
+        {
+            if (!visited[n])
+            {
+                uint64_t tempDist = distance[best.vertex] + adjacencyMatrix[best.vertex][n];
                 if (tempDist < distance[n])
                 {
                     distance[n] = tempDist;
-                    ancester[n] = best.second;
-                    pq.push(make_pair(tempDist, n));
+                    ancester[n] = best.vertex;
+                    fh.update(nodeHandle[n], node_heap(tempDist, n));
                 }
             }
         }
@@ -286,7 +366,7 @@ void Multigraph::readGraphFromFile(string file)
 
         Edge_t e;
         e.weight = 1;
-        
+
         getline(linestream, line, ' ');
         e.from = stoi(line) - 1;
         getline(linestream, line, ' ');
