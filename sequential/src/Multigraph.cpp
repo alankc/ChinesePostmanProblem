@@ -250,7 +250,9 @@ bool Multigraph::dijkstra_boost(uint32_t start, uint32_t end, list<uint32_t> &ou
                 {
                     distance[n] = tempDist;
                     ancester[n] = best.vertex;
-                    fh.update(nodeHandle[n], node_heap(tempDist, n));
+                    nodeHandle[n].node_->value.distance = tempDist;
+                    fh.update(nodeHandle[n]);
+                    //fh.update(nodeHandle[n], node_heap(tempDist, n));
                 }
             }
         }
