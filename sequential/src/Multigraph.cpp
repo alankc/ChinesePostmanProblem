@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
+#include <numeric>
 
 using namespace std;
 
@@ -16,17 +17,19 @@ Multigraph::Multigraph(/* args */)
 {
 }
 
-Multigraph::Multigraph(uint32_t v)
+Multigraph::Multigraph(uint32_t n)
 {
-    vertices.resize(v);
-    adjacencyMatrix.resize(v);
-    for (uint32_t i = 0; i < v; i++)
+    adjacencyMatrix.resize(n);
+    for (uint32_t i = 0; i < n; i++)
     {
-        adjacencyMatrix[i].resize(v, Multigraph::INFINITY);
+        Vertex_t v;
+        v.id = i;
+        vertices.push_back(v);
+        adjacencyMatrix[i].resize(n, Multigraph::INFINITY);
         adjacencyMatrix[i][i] = 0.0;
     }
 
-    neighbors.resize(v);
+    neighbors.resize(n);
 }
 
 Multigraph::~Multigraph()
@@ -64,6 +67,14 @@ void Multigraph::addEdge(Edge_t &edge)
 
 void Multigraph::addEdge(uint32_t from, uint32_t to)
 {
+    neighbors[from].insert(to);
+    neighbors[to].insert(from);
+}
+
+void Multigraph::addEdge(uint32_t from, uint32_t to, uint32_t weight)
+{
+    adjacencyMatrix[from][to] = weight;
+    adjacencyMatrix[to][from] = weight;
     neighbors[from].insert(to);
     neighbors[to].insert(from);
 }
@@ -375,5 +386,48 @@ void Multigraph::readGraphFromFile(string file)
         e.to = stoi(line) - 1;
 
         addEdge(e);
+    }
+}
+
+void Multigraph::generateGraph(uint32_t n)
+{
+    //4 even vertices + number of odd vertices
+    uint64_t nv = 4 + 4 + 6 * n;
+
+    adjacencyMatrix.resize(nv);
+    for (uint32_t i = 0; i < nv; i++)
+    {
+        Vertex_t v;
+        v.id = i;
+        vertices.push_back(v);
+        adjacencyMatrix[i].resize(nv, Multigraph::INFINITY);
+        adjacencyMatrix[i][i] = 0.0;
+    }
+
+    neighbors.resize(nv);
+
+    //first part
+    addEdge(0, 5, 1);
+    addEdge(0, 1, 1);
+    addEdge(1, 3, 1);
+    addEdge(1, 2, 1);
+    addEdge(3, 4, 1);
+    addEdge(2, 4, 1);
+    addEdge(2, 6, 1);
+    addEdge(4, 7, 1);
+    addEdge(6, 5, 1);
+    addEdge(6, 7, 1);
+
+    for (uint64_t i = 8; i < nv; i = i + 6)
+    {
+        addEdge(i, i - 5, 1);
+        addEdge(i + 4, i - 1, 1);
+        addEdge(i, i + 1, 1);
+        addEdge(i, i + 2, 1);
+        addEdge(i + 1, i + 3, 1);
+        addEdge(i + 2, i + 3, 1);
+        addEdge(i + 2, i + 4, 1);
+        addEdge(i + 3, i + 5, 1);
+        addEdge(i + 4, i + 5, 1);
     }
 }

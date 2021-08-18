@@ -331,6 +331,8 @@ int main(int argc, char *argv[])
         mg = generateGraph1();
     else if (argv[1][0] == '2')
         mg = generateGraph2();
+    else if (argv[1][0] == 'g')
+        mg.generateGraph(atoi(argv[2]));
     /*vector<uint32_t> ods;
     cout << "É euleriano? " << mg.isEulerian(ods) << ": ";
     for (auto v : ods)

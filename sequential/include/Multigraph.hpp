@@ -8,19 +8,19 @@
 
 using namespace std;
 
-typedef struct _Vertex_t
+struct Vertex_t
 {
     uint32_t id;
 
-} Vertex_t;
+};
 
-typedef struct _Edge_t
+struct Edge_t
 {
     uint32_t from;
     uint32_t to;
     uint32_t weight;
 
-} Edge_t;
+};
 
 class Multigraph
 {
@@ -31,11 +31,12 @@ private:
     
 public:
     Multigraph(/* args */);
-    Multigraph(uint32_t v);
+    Multigraph(uint32_t n);
     ~Multigraph();
     void addVertex(Vertex_t &vertex);
     void addEdge(Edge_t &edge);
     void addEdge(uint32_t from, uint32_t to);
+    void addEdge(uint32_t from, uint32_t to, uint32_t weight);
     void addVertices(vector<Vertex_t> &newVertices);
     void addEdges(vector<Edge_t> &edges);
     vector<vector<uint32_t>> *getAdjacencyMatrix();
@@ -46,6 +47,12 @@ public:
     bool hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance);
     void print();
     void readGraphFromFile(string file);
+
+    /**
+     * Generate a graph with 4 + 6n odd vertices
+     * @param n number of vertices
+    **/
+    void generateGraph(uint32_t n);
 
     const static uint32_t INFINITY;
 };
