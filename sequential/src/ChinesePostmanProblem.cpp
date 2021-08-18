@@ -3,7 +3,6 @@
 
 #include "../include/ChinesePostmanProblem.hpp"
 
-
 ChinesePostmanProblem::ChinesePostmanProblem(/* args */)
 {
 }
@@ -140,23 +139,29 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
 
     if (!mg->isEulerian(oddVertices))
     {
-        vector<vector<uint64_t>> distances; 
+        cout << "Step 1 - Done" << endl;
+
+        vector<vector<uint64_t>> distances;
         vector<map<uint32_t, list<uint32_t>>> paths;
         listPairs(oddVertices, distances, paths);
+        cout << "Step 2 - Done" << endl;
 
         vector<uint32_t> vec(oddVertices.size());
         std::iota(vec.begin(), vec.end(), 0);
         vector<vector<pair<uint32_t, uint32_t>>> pairs = listPairsCombinations(vec);
-
+        cout << "Step 3 - Done" << endl;
 
         vector<pair<uint32_t, uint32_t>> bestPairs = bestPairsCombination(pairs, distances);
+        cout << "Step 4 - Done" << endl;
 
         modifyGraph(bestPairs, paths);
+        cout << "Step 5 - Done" << endl;
     }
 
     uint64_t distance;
     list<uint32_t> path;
     mg->hierholzer(startVertex, path, distance);
+    cout << "Hierholzer - Done" << endl;
 
     cout << "Total distance: " << distance << endl;
     cout << "Path: ";
