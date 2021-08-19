@@ -332,7 +332,9 @@ int main(int argc, char *argv[])
     else if (argv[1][0] == '2')
         mg = generateGraph2();
     else if (argv[1][0] == 'g')
-        mg.generateGraph(atoi(argv[2]));
+        mg.generateGraph(atoi(argv[2]), atoi(argv[3]));
+
+    mg.print();    
     /*vector<uint32_t> ods;
     cout << "É euleriano? " << mg.isEulerian(ods) << ": ";
     for (auto v : ods)
@@ -357,9 +359,9 @@ int main(int argc, char *argv[])
 
     ChinesePostmanProblem cpp;
     vector<uint32_t> odd1, odd2;
-    cout << "Euleriano: " << mg.isEulerian(odd1) << endl;
+    cout << "Euleriano: " << mg.isEulerian(odd1) << " N = " << odd1.size() << endl;
     cpp.solve(&mg, 0);
-    cout << "Euleriano: " << mg.isEulerian(odd2) << endl;
+    cout << "Euleriano: " << mg.isEulerian(odd2) << " N = " << odd2.size() << endl;
     //mg.print();
 
     return 0;
