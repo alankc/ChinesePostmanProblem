@@ -1,7 +1,10 @@
+#include <limits>
 #include <numeric>
 #include <iostream>
 
 #include "../include/ChinesePostmanProblem.hpp"
+
+using namespace std;
 
 ChinesePostmanProblem::ChinesePostmanProblem(/* args */)
 {
@@ -10,26 +13,6 @@ ChinesePostmanProblem::ChinesePostmanProblem(/* args */)
 ChinesePostmanProblem::~ChinesePostmanProblem()
 {
 }
-
-/*void ChinesePostmanProblem::listPairs(vector<uint32_t> &oddVertices, vector<OddPair> &oddPairs)
-{
-    auto it_i = oddVertices.begin();
-    while (it_i != oddVertices.end())
-    {
-        auto it_j = it_i;
-        it_j++;
-        while (it_j != oddVertices.end())
-        {
-            OddPair op;
-            op.u = *it_i;
-            op.v = *it_j;
-            mg->dijkstra(op.u, op.v, op.path, op.distance);
-            oddPairs.push_back(op);
-            it_j++;
-        }
-        it_i++;
-    }
-}*/
 
 void ChinesePostmanProblem::listPairs(vector<uint32_t> &oddVertices, vector<vector<uint64_t>> &distances, vector<map<uint32_t, list<uint32_t>>> &paths)
 {

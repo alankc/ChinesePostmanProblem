@@ -317,7 +317,7 @@ Multigraph generateGraph2()
     mg.addEdge(e);
     return mg;
 }
-
+//time taskset --cpu-list 0-0 sudo nice -n -19 ./teste g 2 0
 int main(int argc, char *argv[])
 {
     Multigraph mg;
