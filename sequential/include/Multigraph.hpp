@@ -49,10 +49,10 @@ public:
     void readGraphFromFile(string file);
 
     /**
-     * Generate a graph with 4 + 6n odd vertices
+     * Generate a graph with 4 + 6n + 2p odd vertices
      * @param n number of vertices
     **/
-    void generateGraph(uint32_t n);
+    void generateGraph(uint32_t n, uint32_t p);
 
     const static uint32_t INFINITY;
 };

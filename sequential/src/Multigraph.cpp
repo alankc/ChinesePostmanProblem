@@ -389,10 +389,10 @@ void Multigraph::readGraphFromFile(string file)
     }
 }
 
-void Multigraph::generateGraph(uint32_t n)
+void Multigraph::generateGraph(uint32_t n, uint32_t p)
 {
     //4 even vertices + number of odd vertices
-    uint64_t nv = 4 + 4 + 6 * n;
+    uint64_t nv = 4 + 4 + 6 * n + 2 * p;
 
     adjacencyMatrix.resize(nv);
     for (uint32_t i = 0; i < nv; i++)
@@ -418,7 +418,7 @@ void Multigraph::generateGraph(uint32_t n)
     addEdge(6, 5, 1);
     addEdge(6, 7, 1);
 
-    for (uint64_t i = 8; i < nv; i = i + 6)
+    for (uint64_t i = 8; i < nv - 2 * p; i = i + 6)
     {
         addEdge(i, i - 5, 1);
         addEdge(i + 4, i - 1, 1);
@@ -429,5 +429,20 @@ void Multigraph::generateGraph(uint32_t n)
         addEdge(i + 2, i + 4, 1);
         addEdge(i + 3, i + 5, 1);
         addEdge(i + 4, i + 5, 1);
+    }
+
+    if (p > 0)
+    {
+        uint32_t first_v = nv - 2 * p;
+        addEdge(0, first_v, 1);
+        addEdge(5, first_v + 1, 1);
+        addEdge(first_v, first_v + 1, 1);
+
+        for (uint32_t i = first_v; i < nv - 2; i += 2)
+        {
+            addEdge(i, i + 2, 1);
+            addEdge(i + 1, i + 3, 1);
+            addEdge(i + 2, i + 3, 1);
+        }
     }
 }
