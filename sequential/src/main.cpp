@@ -320,48 +320,34 @@ Multigraph generateGraph2()
 //time taskset --cpu-list 0-0 sudo nice -n -19 ./teste g 2 0
 int main(int argc, char *argv[])
 {
-    Multigraph mg;
-    //mg.readGraphFromFile("/home/x/Grafos/Forquilhinha.txt");
-    //mg = generateGraph2();
-    //mg.dijkstra(0,5);
+    if (argc < 5)
+    {
+        cout << argv[0] << " solve_algorithm reps n p" << endl;
+        return 0;
+    }
 
-    if (argv[1][0] == '0')
-        mg = generateGraph0();
-    else if (argv[1][0] == '1')
-        mg = generateGraph1();
-    else if (argv[1][0] == '2')
-        mg = generateGraph2();
-    else if (argv[1][0] == 'g')
-        mg.generateGraph(atoi(argv[2]), atoi(argv[3]));
-  
-    /*vector<uint32_t> ods;
-    cout << "É euleriano? " << mg.isEulerian(ods) << ": ";
-    for (auto v : ods)
-        cout << v << " ";
+    uint32_t reps = atoi(argv[2]);
 
-    list<uint32_t> outputPath;
-    uint64_t distance;
-    mg.dijkstra(0, 7, outputPath, distance);
-    cout << "\nPath D: ";
-    for (auto a : outputPath)
-        cout << a << " ";
-    cout << "\nDistance: " << distance << endl;
-
-    outputPath.clear();
-    distance = 0;
-
-    mg.hierholzer(0, outputPath, distance);
-    cout << "\nPath H: ";
-    for (auto a : outputPath)
-        cout << a << " ";
-    cout << "\nDistance: " << distance << endl;*/
-
-    ChinesePostmanProblem cpp;
-    vector<uint32_t> odd1, odd2;
-    cout << "Euleriano: " << mg.isEulerian(odd1) << " N = " << odd1.size() << endl;
-    cpp.solve_v2(&mg, 0);
-    cout << "Euleriano: " << mg.isEulerian(odd2) << " from " << odd1.size() << " to " << odd2.size() << endl;
-    //mg.print();
+    if (*argv[1] == '1')
+    {
+        cout << "isEulerian\tlistPairs\tlistPairsCombinations\tbestPairsCombination\tmodifyGraph\t";
+        cout << "hierholzer\ttotal time\ttotal distance\tpath" << endl;
+    }
+    else if (*argv[1] == '2')
+    {
+        cout << "isEulerian\tlistPairs\tlistPairsCombinationsBase\tmodifyGraph\t";
+        cout << "hierholzer\ttotal time\ttotal distance\tpath" << endl;
+    }
+    for (uint8_t i = 1; i <= reps; i++)
+    {
+        Multigraph mg;
+        mg.generateGraph(atoi(argv[3]), atoi(argv[4]));
+        ChinesePostmanProblem cpp;
+        if (*argv[1] == '1')
+            cpp.solve(&mg, 0);
+        else if (*argv[1] == '2')
+            cpp.solve_v2(&mg, 0);
+    }
 
     return 0;
 }
