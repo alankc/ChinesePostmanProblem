@@ -135,28 +135,28 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
         start = std::chrono::system_clock::now();
         listPairs(oddVertices, distances, paths);
         end = std::chrono::system_clock::now();
-        auto elapsed_2 = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-        cout << "Step 2 - " << elapsed_2.count() << " microseconds" << endl;
+        auto elapsed_2 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+        cout << "Step 2 - " << elapsed_2.count() << " nanoseconds" << endl;
 
         vector<uint32_t> vec(oddVertices.size());
         std::iota(vec.begin(), vec.end(), 0);
         start = std::chrono::system_clock::now();
         vector<vector<pair<uint32_t, uint32_t>>> pairs = listPairsCombinations(vec);
         end = std::chrono::system_clock::now();
-        auto elapsed_3 = std::chrono::duration_cast<std::chrono::seconds>(end - start);
-        cout << "Step 3 - " << elapsed_3.count() << " seconds" << endl;
+        auto elapsed_3 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+        cout << "Step 3 - " << elapsed_3.count() << " nanoseconds" << endl;
 
         start = std::chrono::system_clock::now();
         vector<pair<uint32_t, uint32_t>> bestPairs = bestPairsCombination(pairs, distances);
         end = std::chrono::system_clock::now();
-        auto elapsed_4 = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-        cout << "Step 4 - " << elapsed_4.count() << " milliseconds" << endl;
+        auto elapsed_4 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+        cout << "Step 4 - " << elapsed_4.count() << " nanoseconds" << endl;
 
         start = std::chrono::system_clock::now();
         modifyGraph(bestPairs, paths);
         end = std::chrono::system_clock::now();
-        auto elapsed_5 = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-        cout << "Step 5 - " << elapsed_5.count() << " microseconds" << endl;
+        auto elapsed_5 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+        cout << "Step 5 - " << elapsed_5.count() << " nanoseconds" << endl;
     }
 
     uint64_t distance;
@@ -164,8 +164,8 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
     start = std::chrono::system_clock::now();
     mg->hierholzer(startVertex, path, distance);
     end = std::chrono::system_clock::now();
-    auto elapsed_6 = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    cout << "Hierholzer - " << elapsed_6.count() << " microseconds" << endl;
+    auto elapsed_6 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+    cout << "Hierholzer - " << elapsed_6.count() << " nanoseconds" << endl;
 
     cout << "Total distance: " << distance << endl;
     cout << "Path: ";
