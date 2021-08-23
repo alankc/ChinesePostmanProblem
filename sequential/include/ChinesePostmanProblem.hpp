@@ -14,10 +14,15 @@ private:
     vector<pair<uint32_t, uint32_t>> bestPairsCombination(vector<vector<pair<uint32_t, uint32_t>>> &pairCombinations, vector<vector<uint64_t>> &distances);
     void modifyGraph(vector<pair<uint32_t, uint32_t>> &bestPairs, vector<map<uint32_t, list<uint32_t>>> &paths);
 
+    vector<pair<uint32_t, uint32_t>> listPairsCombinationsBase(vector<uint32_t> &oddVertices, vector<vector<uint64_t>> &distances);
+    uint64_t distancePairCombination(vector<pair<uint32_t, uint32_t>> &pairCombinations, vector<vector<uint64_t>> &distances);
+    
+
 public:
     ChinesePostmanProblem(/* args */);
     ~ChinesePostmanProblem();
     void solve(Multigraph *mg, uint32_t startVertex);
+    void solve_v2(Multigraph *mg, uint32_t startVertex);
 };
 
 #endif

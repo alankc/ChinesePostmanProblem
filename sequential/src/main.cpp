@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
     ChinesePostmanProblem cpp;
     vector<uint32_t> odd1, odd2;
     cout << "Euleriano: " << mg.isEulerian(odd1) << " N = " << odd1.size() << endl;
-    cpp.solve(&mg, 0);
+    cpp.solve_v2(&mg, 0);
     cout << "Euleriano: " << mg.isEulerian(odd2) << " from " << odd1.size() << " to " << odd2.size() << endl;
     //mg.print();
 
