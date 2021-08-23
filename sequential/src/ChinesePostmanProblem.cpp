@@ -124,6 +124,7 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
     auto start = std::chrono::system_clock::now();
     bool tst = mg->isEulerian(oddVertices);
     auto end = std::chrono::system_clock::now();
+    cout << oddVertices.size() << "\t";
     //auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     auto elapsed_1 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
     cout << elapsed_1.count() << "\t";
@@ -243,6 +244,7 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint32_t startVertex)
     auto start = std::chrono::system_clock::now();
     bool tst = mg->isEulerian(oddVertices);
     auto end = std::chrono::system_clock::now();
+    cout << oddVertices.size() << "\t";
     //auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     auto elapsed_1 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
     cout << elapsed_1.count() << "\t";

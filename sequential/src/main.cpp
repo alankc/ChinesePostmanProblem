@@ -331,13 +331,13 @@ int main(int argc, char *argv[])
     if (*argv[1] == '1')
     {
         cout << "Solve V1" << endl;
-        cout << "isEulerian\tlistPairs\tlistPairsCombinations\tbestPairsCombination\tmodifyGraph\t";
+        cout << "n_odds\tisEulerian\tlistPairs\tlistPairsCombinations\tbestPairsCombination\tmodifyGraph\t";
         cout << "hierholzer\ttotal time\ttotal distance\tpath" << endl;
     }
     else if (*argv[1] == '2')
     {
         cout << "Solve V2" << endl;
-        cout << "isEulerian\tlistPairs\tlistPairsCombinationsBase\tmodifyGraph\t";
+        cout << "n_odds\tisEulerian\tlistPairs\tlistPairsCombinationsBase\tmodifyGraph\t";
         cout << "hierholzer\ttotal time\ttotal distance\tpath" << endl;
     }
     for (uint8_t i = 1; i <= reps; i++)
