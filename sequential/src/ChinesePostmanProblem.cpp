@@ -15,21 +15,21 @@ ChinesePostmanProblem::~ChinesePostmanProblem()
 {
 }
 
-void ChinesePostmanProblem::listPairs(vector<uint32_t> &oddVertices, vector<vector<uint64_t>> &distances, vector<map<uint32_t, list<uint32_t>>> &paths)
+void ChinesePostmanProblem::listPairs(vector<uint16_t> &oddVertices, vector<vector<uint16_t>> &distances, vector<map<uint16_t, list<uint16_t>>> &paths)
 {
-    distances.resize(oddVertices.size(), vector<uint64_t>(oddVertices.size(), Multigraph::INFINITY));
+    distances.resize(oddVertices.size(), vector<uint16_t>(oddVertices.size(), Multigraph::INFINITY));
     paths.resize(oddVertices.size());
 
-    for (uint32_t i = 0; i < oddVertices.size() - 1; i++)
+    for (uint16_t i = 0; i < oddVertices.size() - 1; i++)
     {
-        for (uint32_t j = i + 1; j < oddVertices.size(); j++)
+        for (uint16_t j = i + 1; j < oddVertices.size(); j++)
         {
-            pair<uint32_t, uint32_t> p;
+            pair<uint16_t, uint16_t> p;
             p.first = i;
             p.second = j;
 
-            uint64_t distance;
-            list<uint32_t> path;
+            uint16_t distance;
+            list<uint16_t> path;
 
             mg->dijkstra_boost(oddVertices[i], oddVertices[j], path, distance);
 
@@ -41,30 +41,30 @@ void ChinesePostmanProblem::listPairs(vector<uint32_t> &oddVertices, vector<vect
     }
 }
 
-vector<vector<pair<uint32_t, uint32_t>>> ChinesePostmanProblem::listPairsCombinations(vector<uint32_t> &oddVertices)
+vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombinations(vector<uint16_t> &oddVertices)
 {
-    vector<vector<pair<uint32_t, uint32_t>>> final;
+    vector<vector<pair<uint16_t, uint16_t>>> final;
     if (oddVertices.size() == 2)
     {
-        vector<pair<uint32_t, uint32_t>> buffer;
+        vector<pair<uint16_t, uint16_t>> buffer;
         buffer.push_back(make_pair(oddVertices[0], oddVertices[1]));
         final.push_back(buffer);
     }
     else
     {
-        uint32_t first = *oddVertices.begin();
+        uint16_t first = *oddVertices.begin();
         oddVertices.erase(oddVertices.begin());
 
-        for (uint32_t i = 0; i < oddVertices.size(); i++)
+        for (uint16_t i = 0; i < oddVertices.size(); i++)
         {
             auto odd_j = oddVertices;
-            uint32_t second = oddVertices[i];
+            uint16_t second = oddVertices[i];
             odd_j.erase(odd_j.begin() + i);
 
             auto final_tmp = listPairsCombinations(odd_j);
             for (auto &el : final_tmp)
             {
-                vector<pair<uint32_t, uint32_t>> buffer;
+                vector<pair<uint16_t, uint16_t>> buffer;
                 buffer.push_back(make_pair(first, second));
                 copy(el.begin(), el.end(), back_inserter(buffer));
                 final.push_back(buffer);
@@ -74,13 +74,13 @@ vector<vector<pair<uint32_t, uint32_t>>> ChinesePostmanProblem::listPairsCombina
     return final;
 }
 
-vector<pair<uint32_t, uint32_t>> ChinesePostmanProblem::bestPairsCombination(vector<vector<pair<uint32_t, uint32_t>>> &pairCombinations, vector<vector<uint64_t>> &distances)
+vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::bestPairsCombination(vector<vector<pair<uint16_t, uint16_t>>> &pairCombinations, vector<vector<uint16_t>> &distances)
 {
-    uint64_t min_value = numeric_limits<uint64_t>::max();
-    vector<pair<uint32_t, uint32_t>> min_set;
+    uint16_t min_value = numeric_limits<uint16_t>::max();
+    vector<pair<uint16_t, uint16_t>> min_set;
     for (auto &line : pairCombinations)
     {
-        uint64_t curr_value = 0;
+        uint16_t curr_value = 0;
         for (auto &column : line)
         {
             curr_value += distances[column.first][column.second];
@@ -94,7 +94,7 @@ vector<pair<uint32_t, uint32_t>> ChinesePostmanProblem::bestPairsCombination(vec
     return min_set;
 }
 
-void ChinesePostmanProblem::modifyGraph(vector<pair<uint32_t, uint32_t>> &bestPairs, vector<map<uint32_t, list<uint32_t>>> &paths)
+void ChinesePostmanProblem::modifyGraph(vector<pair<uint16_t, uint16_t>> &bestPairs, vector<map<uint16_t, list<uint16_t>>> &paths)
 {
     for (auto p : bestPairs)
     {
@@ -102,8 +102,8 @@ void ChinesePostmanProblem::modifyGraph(vector<pair<uint32_t, uint32_t>> &bestPa
         auto it = paths[p.first].find(p.second);
         auto it_list = it->second.begin();
 
-        uint32_t curr;
-        uint32_t last = *it_list;
+        uint16_t curr;
+        uint16_t last = *it_list;
         it_list++;
 
         while (it_list != it->second.end())
@@ -116,10 +116,10 @@ void ChinesePostmanProblem::modifyGraph(vector<pair<uint32_t, uint32_t>> &bestPa
     }
 }
 
-void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
+void ChinesePostmanProblem::solve(Multigraph *mg, uint16_t startVertex)
 {
     this->mg = mg;
-    vector<uint32_t> oddVertices;
+    vector<uint16_t> oddVertices;
 
     auto start = std::chrono::system_clock::now();
     bool tst = mg->isEulerian(oddVertices);
@@ -133,8 +133,8 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
 
     if (!tst)
     {
-        vector<vector<uint64_t>> distances;
-        vector<map<uint32_t, list<uint32_t>>> paths;
+        vector<vector<uint16_t>> distances;
+        vector<map<uint16_t, list<uint16_t>>> paths;
         start = std::chrono::system_clock::now();
         listPairs(oddVertices, distances, paths);
         end = std::chrono::system_clock::now();
@@ -142,17 +142,17 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
         total_elapsed += elapsed_2;
         cout << elapsed_2.count() << "\t";
 
-        vector<uint32_t> vec(oddVertices.size());
+        vector<uint16_t> vec(oddVertices.size());
         std::iota(vec.begin(), vec.end(), 0);
         start = std::chrono::system_clock::now();
-        vector<vector<pair<uint32_t, uint32_t>>> pairs = listPairsCombinations(vec);
+        vector<vector<pair<uint16_t, uint16_t>>> pairs = listPairsCombinations(vec);
         end = std::chrono::system_clock::now();
         auto elapsed_3 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
         total_elapsed += elapsed_3;
         cout << elapsed_3.count() << "\t";
 
         start = std::chrono::system_clock::now();
-        vector<pair<uint32_t, uint32_t>> bestPairs = bestPairsCombination(pairs, distances);
+        vector<pair<uint16_t, uint16_t>> bestPairs = bestPairsCombination(pairs, distances);
         end = std::chrono::system_clock::now();
         auto elapsed_4 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
         total_elapsed += elapsed_4;
@@ -166,8 +166,8 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
         cout << elapsed_5.count() << "\t";
     }
 
-    uint64_t distance;
-    list<uint32_t> path;
+    uint16_t distance;
+    list<uint16_t> path;
     start = std::chrono::system_clock::now();
     mg->hierholzer(startVertex, path, distance);
     end = std::chrono::system_clock::now();
@@ -187,34 +187,34 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint32_t startVertex)
     cout << endl;
 }
 
-vector<pair<uint32_t, uint32_t>> ChinesePostmanProblem::listPairsCombinationsBase(vector<uint32_t> &oddVertices, vector<vector<uint64_t>> &distances)
+vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBase(vector<uint16_t> &oddVertices, vector<vector<uint16_t>> &distances)
 {
-    vector<pair<uint32_t, uint32_t>> final;
+    vector<pair<uint16_t, uint16_t>> final;
     if (oddVertices.size() == 2)
     {
         final.push_back(make_pair(oddVertices[0], oddVertices[1]));
     }
     else
     {
-        uint32_t first = *oddVertices.begin();
+        uint16_t first = *oddVertices.begin();
         oddVertices.erase(oddVertices.begin());
 
-        uint64_t min_distance = numeric_limits<uint64_t>::max();
+        uint16_t min_distance = numeric_limits<uint16_t>::max();
 
-        for (uint32_t i = 0; i < oddVertices.size(); i++)
+        for (uint16_t i = 0; i < oddVertices.size(); i++)
         {
             auto odd_j = oddVertices;
-            uint32_t second = oddVertices[i];
+            uint16_t second = oddVertices[i];
             odd_j.erase(odd_j.begin() + i);
 
             auto final_tmp = listPairsCombinations(odd_j);
             for (auto &el : final_tmp)
             {
-                vector<pair<uint32_t, uint32_t>> buffer;
+                vector<pair<uint16_t, uint16_t>> buffer;
                 buffer.push_back(make_pair(first, second));
                 copy(el.begin(), el.end(), back_inserter(buffer));
                 //verificar se o melhor
-                uint64_t total_distance = distancePairCombination(buffer, distances);
+                uint16_t total_distance = distancePairCombination(buffer, distances);
                 if (total_distance < min_distance)
                 {
                     final = buffer;
@@ -226,9 +226,9 @@ vector<pair<uint32_t, uint32_t>> ChinesePostmanProblem::listPairsCombinationsBas
     return final;
 }
 
-uint64_t ChinesePostmanProblem::distancePairCombination(vector<pair<uint32_t, uint32_t>> &pairCombinations, vector<vector<uint64_t>> &distances)
+uint16_t ChinesePostmanProblem::distancePairCombination(vector<pair<uint16_t, uint16_t>> &pairCombinations, vector<vector<uint16_t>> &distances)
 {
-    uint64_t curr_value = 0;
+    uint16_t curr_value = 0;
     for (auto &column : pairCombinations)
     {
         curr_value += distances[column.first][column.second];
@@ -236,10 +236,10 @@ uint64_t ChinesePostmanProblem::distancePairCombination(vector<pair<uint32_t, ui
     return curr_value;
 }
 
-void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint32_t startVertex)
+void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint16_t startVertex)
 {
     this->mg = mg;
-    vector<uint32_t> oddVertices;
+    vector<uint16_t> oddVertices;
 
     auto start = std::chrono::system_clock::now();
     bool tst = mg->isEulerian(oddVertices);
@@ -253,8 +253,8 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint32_t startVertex)
 
     if (!tst)
     {
-        vector<vector<uint64_t>> distances;
-        vector<map<uint32_t, list<uint32_t>>> paths;
+        vector<vector<uint16_t>> distances;
+        vector<map<uint16_t, list<uint16_t>>> paths;
         start = std::chrono::system_clock::now();
         listPairs(oddVertices, distances, paths);
         end = std::chrono::system_clock::now();
@@ -262,10 +262,10 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint32_t startVertex)
         total_elapsed += elapsed_2;
         cout << elapsed_2.count() << "\t";
 
-        vector<uint32_t> vec(oddVertices.size());
+        vector<uint16_t> vec(oddVertices.size());
         std::iota(vec.begin(), vec.end(), 0);
         start = std::chrono::system_clock::now();
-        vector<pair<uint32_t, uint32_t>> bestPairs = listPairsCombinationsBase(vec, distances);
+        vector<pair<uint16_t, uint16_t>> bestPairs = listPairsCombinationsBase(vec, distances);
         end = std::chrono::system_clock::now();
         auto elapsed_3 = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
         total_elapsed += elapsed_3;
@@ -279,8 +279,8 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint32_t startVertex)
         cout << elapsed_4.count() << "\t";
     }
 
-    uint64_t distance;
-    list<uint32_t> path;
+    uint16_t distance;
+    list<uint16_t> path;
     start = std::chrono::system_clock::now();
     mg->hierholzer(startVertex, path, distance);
     end = std::chrono::system_clock::now();
