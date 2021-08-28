@@ -11,16 +11,16 @@
 
 using namespace std;
 
-const uint32_t Multigraph::INFINITY = numeric_limits<uint32_t>::max() / 4;
+const uint16_t Multigraph::INFINITY = numeric_limits<uint16_t>::max() / 4;
 
 Multigraph::Multigraph(/* args */)
 {
 }
 
-Multigraph::Multigraph(uint32_t n)
+Multigraph::Multigraph(uint16_t n)
 {
     adjacencyMatrix.resize(n);
-    for (uint32_t i = 0; i < n; i++)
+    for (uint16_t i = 0; i < n; i++)
     {
         Vertex_t v;
         v.id = i;
@@ -42,11 +42,11 @@ void Multigraph::addVertex(Vertex_t &vertex)
     vertices.push_back(vertex);
 
     //resize adjacencyMatrix due to new vertex
-    uint32_t last = adjacencyMatrix.size();
-    uint32_t newSize = adjacencyMatrix.size() + 1;
+    uint16_t last = adjacencyMatrix.size();
+    uint16_t newSize = adjacencyMatrix.size() + 1;
     adjacencyMatrix.resize(newSize);
 
-    for (uint32_t i = 0; i < last; i++)
+    for (uint16_t i = 0; i < last; i++)
         adjacencyMatrix[i].push_back(Multigraph::INFINITY);
 
     //resizing and putting infinity value in the last line
@@ -65,13 +65,13 @@ void Multigraph::addEdge(Edge_t &edge)
     neighbors[edge.to].insert(edge.from);
 }
 
-void Multigraph::addEdge(uint32_t from, uint32_t to)
+void Multigraph::addEdge(uint16_t from, uint16_t to)
 {
     neighbors[from].insert(to);
     neighbors[to].insert(from);
 }
 
-void Multigraph::addEdge(uint32_t from, uint32_t to, uint32_t weight)
+void Multigraph::addEdge(uint16_t from, uint16_t to, uint16_t weight)
 {
     adjacencyMatrix[from][to] = weight;
     adjacencyMatrix[to][from] = weight;
@@ -86,14 +86,14 @@ void Multigraph::addVertices(vector<Vertex_t> &newVertices)
         vertices.push_back(v);
 
     //resize adjacencyMatrix due to new vertex
-    uint32_t last = adjacencyMatrix.size();
-    uint32_t newSize = adjacencyMatrix.size() + newVertices.size();
+    uint16_t last = adjacencyMatrix.size();
+    uint16_t newSize = adjacencyMatrix.size() + newVertices.size();
     adjacencyMatrix.resize(newSize);
 
-    for (uint32_t i = 0; i < last; i++)
+    for (uint16_t i = 0; i < last; i++)
         adjacencyMatrix[i].resize(newSize, Multigraph::INFINITY);
 
-    for (uint32_t i = last; i < newSize; i++)
+    for (uint16_t i = last; i < newSize; i++)
     {
         adjacencyMatrix[i].resize(newSize, Multigraph::INFINITY);
         adjacencyMatrix[i][i] = 0.0;
@@ -114,20 +114,20 @@ void Multigraph::addEdges(vector<Edge_t> &edges)
     }
 }
 
-vector<vector<uint32_t>> *Multigraph::getAdjacencyMatrix()
+vector<vector<uint16_t>> *Multigraph::getAdjacencyMatrix()
 {
     return &adjacencyMatrix;
 }
 
-vector<unordered_multiset<uint32_t>> *Multigraph::getNeighbors()
+vector<unordered_multiset<uint16_t>> *Multigraph::getNeighbors()
 {
     return &neighbors;
 }
 
-bool Multigraph::isEulerian(vector<uint32_t> &oddVertices)
+bool Multigraph::isEulerian(vector<uint16_t> &oddVertices)
 {
     bool tst = true;
-    for (uint32_t i = 0; i < neighbors.size(); i++)
+    for (uint16_t i = 0; i < neighbors.size(); i++)
     {
         if ((neighbors[i].size() > 0) && !(neighbors[i].size() % 2 == 0))
         {
@@ -139,18 +139,18 @@ bool Multigraph::isEulerian(vector<uint32_t> &oddVertices)
 }
 
 //first is cost, second is id vertex
-typedef pair<uint64_t, uint32_t> pq_pair;
-bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance)
+typedef pair<uint16_t, uint16_t> pq_pair;
+bool Multigraph::dijkstra(uint16_t start, uint16_t end, list<uint16_t> &outputPath, uint16_t &totalDistance)
 {
     priority_queue<pq_pair, vector<pq_pair>, greater<pq_pair>> pq;
 
-    vector<uint64_t> distance(vertices.size(), Multigraph::INFINITY);
-    vector<int64_t> ancester(vertices.size(), -1);
+    vector<uint16_t> distance(vertices.size(), Multigraph::INFINITY);
+    vector<int32_t> ancester(vertices.size(), -1);
     vector<bool> visited(vertices.size(), false);
 
-    distance[start] = 0.0;
+    distance[start] = 0;
 
-    pq.push(make_pair(0.0, start));
+    pq.push(make_pair(0, start));
 
     while (!pq.empty())
     {
@@ -163,7 +163,7 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
         {
             if (best.second == end)
             {
-                uint32_t curr = end;
+                uint16_t curr = end;
                 totalDistance = 0;
                 while (curr != start)
                 {
@@ -179,7 +179,7 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
             {
                 if (!visited[n])
                 {
-                    uint64_t tempDist = distance[best.second] + adjacencyMatrix[best.second][n];
+                    uint16_t tempDist = distance[best.second] + adjacencyMatrix[best.second][n];
 
                     if (tempDist < distance[n])
                     {
@@ -197,9 +197,9 @@ bool Multigraph::dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPa
 #include <boost/heap/fibonacci_heap.hpp>
 struct node_heap
 {
-    uint64_t distance;
-    uint32_t vertex;
-    node_heap(uint64_t distance, uint32_t vertex) : distance(distance), vertex(vertex) {}
+    uint16_t distance;
+    uint16_t vertex;
+    node_heap(uint16_t distance, uint16_t vertex) : distance(distance), vertex(vertex) {}
     node_heap() {}
 };
 
@@ -212,15 +212,15 @@ struct compare_node
 };
 typedef boost::heap::fibonacci_heap<node_heap, boost::heap::compare<compare_node>> fibonacci_heap_t;
 typedef fibonacci_heap_t::handle_type handle_t;
-bool Multigraph::dijkstra_boost(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance)
+bool Multigraph::dijkstra_boost(uint16_t start, uint16_t end, list<uint16_t> &outputPath, uint16_t &totalDistance)
 {
     fibonacci_heap_t fh;
-    vector<uint64_t> distance(vertices.size(), Multigraph::INFINITY);
-    vector<int64_t> ancester(vertices.size(), -1);
+    vector<uint16_t> distance(vertices.size(), Multigraph::INFINITY);
+    vector<int32_t> ancester(vertices.size(), -1);
     vector<bool> visited(vertices.size(), false);
     vector<handle_t> nodeHandle;
 
-    for (uint32_t i = 0; i < vertices.size(); i++)
+    for (uint16_t i = 0; i < vertices.size(); i++)
     {
         node_heap nh(Multigraph::INFINITY, vertices[i].id);
         //if (vertices[i].id == start)
@@ -240,7 +240,7 @@ bool Multigraph::dijkstra_boost(uint32_t start, uint32_t end, list<uint32_t> &ou
 
         if (best.vertex == end)
         {
-            uint32_t curr = end;
+            uint16_t curr = end;
             totalDistance = 0;
             while (curr != start)
             {
@@ -256,7 +256,7 @@ bool Multigraph::dijkstra_boost(uint32_t start, uint32_t end, list<uint32_t> &ou
         {
             if (!visited[n])
             {
-                uint64_t tempDist = distance[best.vertex] + adjacencyMatrix[best.vertex][n];
+                uint16_t tempDist = distance[best.vertex] + adjacencyMatrix[best.vertex][n];
                 if (tempDist < distance[n])
                 {
                     distance[n] = tempDist;
@@ -271,17 +271,17 @@ bool Multigraph::dijkstra_boost(uint32_t start, uint32_t end, list<uint32_t> &ou
     return false;
 }
 
-bool Multigraph::hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance)
+bool Multigraph::hierholzer(uint16_t start, list<uint16_t> &outputPath, uint16_t &totalDistance)
 {
-    vector<unordered_multiset<uint32_t>> n(neighbors);
+    vector<unordered_multiset<uint16_t>> n(neighbors);
 
-    stack<uint32_t> tempEulerPath;
+    stack<uint16_t> tempEulerPath;
 
     tempEulerPath.push(start);
-    distance = 0;
+    totalDistance = 0;
     while (!tempEulerPath.empty())
     {
-        uint32_t u = tempEulerPath.top();
+        uint16_t u = tempEulerPath.top();
 
         if (n[u].size() == 0)
         {
@@ -290,8 +290,8 @@ bool Multigraph::hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t
         }
         else
         {
-            uint32_t v = *n[u].begin();
-            distance += adjacencyMatrix[u][v];
+            uint16_t v = *n[u].begin();
+            totalDistance += adjacencyMatrix[u][v];
             tempEulerPath.push(v);
             n[u].erase(n[u].begin());
             n[v].erase(n[v].find(u));
@@ -311,7 +311,7 @@ void Multigraph::print()
     cout << "\n";
 
     cout << "\nNeighbors: \n";
-    for (uint32_t i = 0; i < neighbors.size(); i++)
+    for (uint16_t i = 0; i < neighbors.size(); i++)
     {
         cout << "[" << i << "]: ";
         for (auto &e : neighbors[i])
@@ -338,10 +338,10 @@ void Multigraph::print()
     cout << "\n========================================" << endl;
 }
 
-void gotoLine(std::ifstream &ifs, uint32_t num)
+void gotoLine(std::ifstream &ifs, uint16_t num)
 {
     ifs.seekg(std::ios::beg);
-    for (uint32_t i = 0; i < num - 1; i++)
+    for (uint16_t i = 0; i < num - 1; i++)
         ifs.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
@@ -357,10 +357,10 @@ void Multigraph::readGraphFromFile(string file)
     getline(linestream, line, ' ');
     getline(linestream, line, ' ');
 
-    uint32_t num_ver = stol(line);
+    uint16_t num_ver = stol(line);
     vertices.resize(num_ver);
     adjacencyMatrix.resize(num_ver);
-    for (uint32_t i = 0; i < num_ver; i++)
+    for (uint16_t i = 0; i < num_ver; i++)
     {
         adjacencyMatrix[i].resize(num_ver, Multigraph::INFINITY);
         adjacencyMatrix[i][i] = 0.0;
@@ -389,13 +389,13 @@ void Multigraph::readGraphFromFile(string file)
     }
 }
 
-void Multigraph::generateGraph(uint32_t n, uint32_t p)
+void Multigraph::generateGraph(uint16_t n, uint16_t p)
 {
     //4 even vertices + number of odd vertices
-    uint64_t nv = 4 + 4 + 6 * n + 2 * p;
+    uint16_t nv = 4 + 4 + 6 * n + 2 * p;
 
     adjacencyMatrix.resize(nv);
-    for (uint32_t i = 0; i < nv; i++)
+    for (uint16_t i = 0; i < nv; i++)
     {
         Vertex_t v;
         v.id = i;
@@ -418,7 +418,7 @@ void Multigraph::generateGraph(uint32_t n, uint32_t p)
     addEdge(6, 5, 1);
     addEdge(6, 7, 1);
 
-    for (uint64_t i = 8; i < nv - 2 * p; i = i + 6)
+    for (uint16_t i = 8; i < nv - 2 * p; i = i + 6)
     {
         addEdge(i, i - 5, 1);
         addEdge(i + 4, i - 1, 1);
@@ -433,12 +433,12 @@ void Multigraph::generateGraph(uint32_t n, uint32_t p)
 
     if (p > 0)
     {
-        uint32_t first_v = nv - 2 * p;
+        uint16_t first_v = nv - 2 * p;
         addEdge(0, first_v, 1);
         addEdge(5, first_v + 1, 1);
         addEdge(first_v, first_v + 1, 1);
 
-        for (uint32_t i = first_v; i < nv - 2; i += 2)
+        for (uint16_t i = first_v; i < nv - 2; i += 2)
         {
             addEdge(i, i + 2, 1);
             addEdge(i + 1, i + 3, 1);

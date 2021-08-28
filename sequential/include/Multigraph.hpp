@@ -10,15 +10,15 @@ using namespace std;
 
 struct Vertex_t
 {
-    uint32_t id;
+    uint16_t id;
 
 };
 
 struct Edge_t
 {
-    uint32_t from;
-    uint32_t to;
-    uint32_t weight;
+    uint16_t from;
+    uint16_t to;
+    uint16_t weight;
 
 };
 
@@ -26,25 +26,25 @@ class Multigraph
 {
 private:
     vector<Vertex_t> vertices;
-    vector<unordered_multiset<uint32_t>> neighbors;
-    vector<vector<uint32_t>> adjacencyMatrix;
+    vector<unordered_multiset<uint16_t>> neighbors;
+    vector<vector<uint16_t>> adjacencyMatrix;
     
 public:
     Multigraph(/* args */);
-    Multigraph(uint32_t n);
+    Multigraph(uint16_t n);
     ~Multigraph();
     void addVertex(Vertex_t &vertex);
     void addEdge(Edge_t &edge);
-    void addEdge(uint32_t from, uint32_t to);
-    void addEdge(uint32_t from, uint32_t to, uint32_t weight);
+    void addEdge(uint16_t from, uint16_t to);
+    void addEdge(uint16_t from, uint16_t to, uint16_t weight);
     void addVertices(vector<Vertex_t> &newVertices);
     void addEdges(vector<Edge_t> &edges);
-    vector<vector<uint32_t>> *getAdjacencyMatrix();
-    vector<unordered_multiset<uint32_t>> *getNeighbors();
-    bool isEulerian(vector<uint32_t> &oddVertices);
-    bool dijkstra(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance);
-    bool dijkstra_boost(uint32_t start, uint32_t end, list<uint32_t> &outputPath, uint64_t &totalDistance);
-    bool hierholzer(uint32_t start, list<uint32_t> &outputPath, uint64_t &distance);
+    vector<vector<uint16_t>> *getAdjacencyMatrix();
+    vector<unordered_multiset<uint16_t>> *getNeighbors();
+    bool isEulerian(vector<uint16_t> &oddVertices);
+    bool dijkstra(uint16_t start, uint16_t end, list<uint16_t> &outputPath, uint16_t &totalDistance);
+    bool dijkstra_boost(uint16_t start, uint16_t end, list<uint16_t> &outputPath, uint16_t &totalDistance);
+    bool hierholzer(uint16_t start, list<uint16_t> &outputPath, uint16_t &totalDistance);
     void print();
     void readGraphFromFile(string file);
 
@@ -52,9 +52,9 @@ public:
      * Generate a graph with 4 + 6n + 2p odd vertices
      * @param n number of vertices
     **/
-    void generateGraph(uint32_t n, uint32_t p);
+    void generateGraph(uint16_t n, uint16_t p);
 
-    const static uint32_t INFINITY;
+    const static uint16_t INFINITY;
 };
 
 #endif
