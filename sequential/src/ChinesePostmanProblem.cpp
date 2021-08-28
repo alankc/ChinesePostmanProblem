@@ -77,21 +77,21 @@ vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombina
 vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::bestPairsCombination(vector<vector<pair<uint16_t, uint16_t>>> &pairCombinations, vector<vector<uint16_t>> &distances)
 {
     uint16_t min_value = numeric_limits<uint16_t>::max();
-    vector<pair<uint16_t, uint16_t>> min_set;
-    for (auto &line : pairCombinations)
+    uint16_t min_id = 0;
+    for (uint16_t i = 0; i < pairCombinations.size(); i++)
     {
         uint16_t curr_value = 0;
-        for (auto &column : line)
+        for (auto &column : pairCombinations[i])
         {
             curr_value += distances[column.first][column.second];
         }
         if (curr_value < min_value)
         {
             min_value = curr_value;
-            min_set = line;
+            min_id = i;
         }
     }
-    return min_set;
+    return pairCombinations[min_id];
 }
 
 void ChinesePostmanProblem::modifyGraph(vector<pair<uint16_t, uint16_t>> &bestPairs, vector<map<uint16_t, list<uint16_t>>> &paths)
@@ -208,18 +208,28 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
             odd_j.erase(odd_j.begin() + i);
 
             auto final_tmp = listPairsCombinations(odd_j);
-            for (auto &el : final_tmp)
-            {
-                vector<pair<uint16_t, uint16_t>> buffer;
-                buffer.push_back(make_pair(first, second));
-                copy(el.begin(), el.end(), back_inserter(buffer));
-                //verificar se o melhor
-                uint16_t total_distance = distancePairCombination(buffer, distances);
-                if (total_distance < min_distance)
+
+            //defining local minimum
+            uint16_t min_id = 0;
+            uint16_t min_distance_local = numeric_limits<uint16_t>::max();
+            for (uint16_t j = 0; j < final_tmp.size(); j++)
+            { //verificar se o melhor
+                uint16_t total_distance = distances[first][second] + distancePairCombination(final_tmp[j], distances);
+                if (total_distance < min_distance_local)
                 {
-                    final = buffer;
-                    min_distance = total_distance;
+                    min_id = j;
+                    min_distance_local = total_distance;
                 }
+            }
+
+            //defining global minimum
+            if (min_distance_local < min_distance)
+            {
+                final.clear();
+                final.push_back(make_pair(first, second));
+                copy(final_tmp[min_id].begin(), final_tmp[min_id].end(), back_inserter(final));
+
+                min_distance = min_distance_local;
             }
         }
     }
