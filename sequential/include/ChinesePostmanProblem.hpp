@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "Multigraph.hpp"
+#include "../../common/include/Multigraph.hpp"
 
 class ChinesePostmanProblem
 {
