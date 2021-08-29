@@ -1,4 +1,4 @@
- g++ common/src/* parallel-v1/src/* -o cpp_problem -fopenmp -O2
+g++ common/src/* parallel-v1/src/* -o cpp_problem -fopenmp -O2
 
 export OMP_NUM_THREADS=6
 printf "\nLIXO-AQUECIMENTO"
