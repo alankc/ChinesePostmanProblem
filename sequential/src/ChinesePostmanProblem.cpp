@@ -210,9 +210,9 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
             auto final_tmp = listPairsCombinations(odd_j);
 
             //defining local minimum
-            uint16_t min_id = 0;
+            uint32_t min_id = 0;
             uint16_t min_distance_local = numeric_limits<uint16_t>::max();
-            for (uint16_t j = 0; j < final_tmp.size(); j++)
+            for (uint32_t j = 0; j < final_tmp.size(); j++)
             { //verificar se o melhor
                 uint16_t total_distance = distances[first][second] + distancePairCombination(final_tmp[j], distances);
                 if (total_distance < min_distance_local)
