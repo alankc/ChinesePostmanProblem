@@ -2,6 +2,7 @@
 #include <numeric>
 #include <iostream>
 #include <chrono>
+#include <omp.h>
 
 #include "../include/ChinesePostmanProblem.hpp"
 
@@ -187,21 +188,46 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint16_t startVertex)
     cout << endl;
 }
 
+struct MinOMP
+{
+    uint16_t distance;
+    vector<pair<uint16_t, uint16_t>> pairs;
+    MinOMP ()
+    {   
+        distance = numeric_limits<uint16_t>::max();
+        pairs.resize(0);
+    }
+};
+
+MinOMP MinOMPCompare(MinOMP& a, MinOMP& b) 
+{
+    return a.distance < b.distance ? a : b;
+}
+
+#pragma omp declare reduction(minimum: MinOMP: omp_out=MinOMPCompare(omp_out, omp_in)) initializer(omp_priv = MinOMP())
+
 vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBase(vector<uint16_t> &oddVertices, vector<vector<uint16_t>> &distances)
 {
-    vector<pair<uint16_t, uint16_t>> final;
     if (oddVertices.size() == 2)
     {
-        final.push_back(make_pair(oddVertices[0], oddVertices[1]));
+        vector<pair<uint16_t, uint16_t>> result;
+        result.push_back(make_pair(oddVertices[0], oddVertices[1]));
+        return result;
     }
     else
     {
         uint16_t first = *oddVertices.begin();
         oddVertices.erase(oddVertices.begin());
 
-        uint16_t min_distance = numeric_limits<uint16_t>::max();
+        //to allow parallel
+        uint16_t oddVertices_size = oddVertices.size();
+        MinOMP minimum_omp;
+        minimum_omp.distance = numeric_limits<uint16_t>::max();
 
-        for (uint16_t i = 0; i < oddVertices.size(); i++)
+        #pragma omp parallel
+        {
+        #pragma omp for schedule(dynamic,1) reduction(minimum:minimum_omp)
+        for (uint16_t i = 0; i < oddVertices_size; i++)
         {
             auto odd_j = oddVertices;
             uint16_t second = oddVertices[i];
@@ -210,9 +236,9 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
             auto final_tmp = listPairsCombinations(odd_j);
 
             //defining local minimum
-            uint16_t min_id = 0;
+            uint32_t min_id = 0;
             uint16_t min_distance_local = numeric_limits<uint16_t>::max();
-            for (uint16_t j = 0; j < final_tmp.size(); j++)
+            for (uint32_t j = 0; j < final_tmp.size(); j++)
             { //verificar se o melhor
                 uint16_t total_distance = distances[first][second] + distancePairCombination(final_tmp[j], distances);
                 if (total_distance < min_distance_local)
@@ -223,17 +249,19 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
             }
 
             //defining global minimum
-            if (min_distance_local < min_distance)
+            if (min_distance_local < minimum_omp.distance)
             {
-                final.clear();
-                final.push_back(make_pair(first, second));
-                copy(final_tmp[min_id].begin(), final_tmp[min_id].end(), back_inserter(final));
+                minimum_omp.pairs.clear();
+                minimum_omp.pairs.push_back(make_pair(first, second));
+                copy(final_tmp[min_id].begin(), final_tmp[min_id].end(), back_inserter(minimum_omp.pairs));
 
-                min_distance = min_distance_local;
+                minimum_omp.distance = min_distance_local;
             }
         }
+
+        }
+        return minimum_omp.pairs;
     }
-    return final;
 }
 
 uint16_t ChinesePostmanProblem::distancePairCombination(vector<pair<uint16_t, uint16_t>> &pairCombinations, vector<vector<uint16_t>> &distances)
