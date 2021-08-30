@@ -41,6 +41,14 @@ void ChinesePostmanProblem::listPairs(vector<uint16_t> &oddVertices, vector<vect
     }
 }
 
+uint32_t doubleFactorial(uint32_t n)
+{
+	if ((n == 0) || (n == 1))
+		return 1;
+
+    return n * doubleFactorial(n-2);
+}
+
 vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombinations(vector<uint16_t> &oddVertices)
 {
     vector<vector<pair<uint16_t, uint16_t>>> final;
@@ -50,7 +58,7 @@ vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombina
         buffer.push_back(make_pair(oddVertices[0], oddVertices[1]));
         final.push_back(buffer);
     }
-    else
+	else if (oddVertices.size() <= 6)
     {
         uint16_t first = *oddVertices.begin();
         oddVertices.erase(oddVertices.begin());
@@ -61,15 +69,42 @@ vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombina
             uint16_t second = oddVertices[i];
             odd_j.erase(odd_j.begin() + i);
 
-            auto final_tmp = listPairsCombinations(odd_j);
+			auto final_tmp = listPairsCombinations(odd_j);     
             for (auto &el : final_tmp)
             {
                 vector<pair<uint16_t, uint16_t>> buffer;
                 buffer.push_back(make_pair(first, second));
-                copy(el.begin(), el.end(), back_inserter(buffer));
-                final.push_back(buffer);
+				final.push_back(buffer);
+                copy(el.begin(), el.end(), back_inserter(final[final.size()-1]));
             }
         }
+    }
+    else
+    {
+		uint64_t step = doubleFactorial(oddVertices.size() - 3);
+		final.resize(step * (oddVertices.size() - 1));
+
+        uint16_t first = *oddVertices.begin();
+        oddVertices.erase(oddVertices.begin());
+
+        for (uint16_t i = 0; i < oddVertices.size(); i++)
+        {
+			#pragma omp task shared(final) 
+			{
+				auto odd_j = oddVertices;
+				uint16_t second = oddVertices[i];
+				odd_j.erase(odd_j.begin() + i);
+
+				auto final_tmp = listPairsCombinations(odd_j);
+
+				for (uint64_t j = 0; j < final_tmp.size(); j++)
+				{
+					final[i * step + j].push_back(make_pair(first, second));
+					copy(final_tmp[j].begin(), final_tmp[j].end(), back_inserter(final[i * step + j]));
+				}
+			}
+        }
+		#pragma omp taskwait
     }
     return final;
 }
@@ -194,7 +229,7 @@ struct MinOMP
     MinOMP ()
     {   
         distance = numeric_limits<uint16_t>::max();
-        distance = 0;
+        id = 0;
     }
 };
 
@@ -225,13 +260,16 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
             uint16_t second = oddVertices[i];
             odd_j.erase(odd_j.begin() + i);
 
-            auto final_tmp = listPairsCombinations(odd_j);
-
-            //defining local minimum
+			//defining local minimum
             MinOMP minimum_omp;
+			vector<vector<pair<uint16_t, uint16_t>>> final_tmp;
 			#pragma omp parallel
         	{
-        	#pragma omp for schedule(dynamic,1) reduction(minimum:minimum_omp)
+
+			#pragma omp single
+            final_tmp = listPairsCombinations(odd_j);
+
+        	#pragma omp for schedule(guided) reduction(minimum:minimum_omp)
             for (uint32_t j = 0; j < final_tmp.size(); j++)
             { //verificar se o melhor
                 uint16_t total_distance = distances[first][second] + distancePairCombination(final_tmp[j], distances);
