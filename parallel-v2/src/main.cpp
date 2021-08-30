@@ -320,9 +320,9 @@ Multigraph generateGraph2()
 //time taskset --cpu-list 0-0 sudo nice -n -19 ./teste g 2 0
 int main(int argc, char *argv[])
 {
-    if (argc < 5)
+    if (argc < 6)
     {
-        cout << argv[0] << " solve_algorithm reps n p" << endl;
+        cout << argv[0] << " solve_algorithm reps n p min_seq" << endl;
         return 0;
     }
 
@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
         if (*argv[1] == '1')
             cpp.solve(&mg, 0);
         else if (*argv[1] == '2')
-            cpp.solve_v2(&mg, 0);
+            cpp.solve_v2(&mg, 0, atoi(argv[5]));
     }
 
     return 0;

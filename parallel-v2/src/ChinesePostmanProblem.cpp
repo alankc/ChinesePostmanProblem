@@ -58,7 +58,7 @@ vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombina
         buffer.push_back(make_pair(oddVertices[0], oddVertices[1]));
         final.push_back(buffer);
     }
-	else if (oddVertices.size() <= 6)
+	else if (oddVertices.size() <= min_seq)
     {
         uint16_t first = *oddVertices.begin();
         oddVertices.erase(oddVertices.begin());
@@ -305,9 +305,10 @@ uint16_t ChinesePostmanProblem::distancePairCombination(vector<pair<uint16_t, ui
     return curr_value;
 }
 
-void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint16_t startVertex)
+void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint16_t startVertex, uint32_t min_seq)
 {
     this->mg = mg;
+	this->min_seq = min_seq;
     vector<uint16_t> oddVertices;
 
     auto start = std::chrono::system_clock::now();
