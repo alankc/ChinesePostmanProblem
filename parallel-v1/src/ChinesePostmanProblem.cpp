@@ -67,8 +67,8 @@ vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombina
             {
                 vector<pair<uint16_t, uint16_t>> buffer;
                 buffer.push_back(make_pair(first, second));
-                copy(el.begin(), el.end(), back_inserter(buffer));
-                final.push_back(buffer);
+				final.push_back(buffer);
+                copy(el.begin(), el.end(), back_inserter(final[final.size()-1]));
             }
         }
     }
