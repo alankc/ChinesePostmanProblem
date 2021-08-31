@@ -201,17 +201,26 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
 
         uint16_t min_distance = numeric_limits<uint16_t>::max();
 
+        chrono::nanoseconds time_final_tmp(0);
+        chrono::nanoseconds time_foor_loop(0);
+        chrono::_V2::system_clock::time_point begin;
+        chrono::_V2::system_clock::time_point end;
+        
         for (uint16_t i = 0; i < oddVertices.size(); i++)
         {
             auto odd_j = oddVertices;
             uint16_t second = oddVertices[i];
             odd_j.erase(odd_j.begin() + i);
 
+            begin = std::chrono::system_clock::now();
             auto final_tmp = listPairsCombinations(odd_j);
+            end = std::chrono::system_clock::now();
+            time_final_tmp += end - begin;
 
             //defining local minimum
             uint32_t min_id = 0;
             uint16_t min_distance_local = numeric_limits<uint16_t>::max();
+            begin = std::chrono::system_clock::now();
             for (uint32_t j = 0; j < final_tmp.size(); j++)
             { //verificar se o melhor
                 uint16_t total_distance = distances[first][second] + distancePairCombination(final_tmp[j], distances);
@@ -221,6 +230,8 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
                     min_distance_local = total_distance;
                 }
             }
+            end = std::chrono::system_clock::now();
+            time_foor_loop += end - begin;
 
             //defining global minimum
             if (min_distance_local < min_distance)
@@ -232,6 +243,7 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
                 min_distance = min_distance_local;
             }
         }
+        cout << time_final_tmp.count() << "\t" << time_foor_loop.count() << "\t";
     }
     return final;
 }
