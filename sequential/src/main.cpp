@@ -1,7 +1,4 @@
 #include <iostream>
-#include <unordered_set>
-#include <iomanip>
-#include "../../common/include/Multigraph.hpp"
 #include "../include/ChinesePostmanProblem.hpp"
 
 using namespace std;
