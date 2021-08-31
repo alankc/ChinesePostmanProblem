@@ -254,6 +254,11 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
 
         uint16_t min_distance = numeric_limits<uint16_t>::max();
 
+        chrono::nanoseconds time_final_tmp(0);
+        chrono::nanoseconds time_foor_loop(0);
+        chrono::_V2::system_clock::time_point begin;
+        chrono::_V2::system_clock::time_point end;        
+
         for (uint16_t i = 0; i < oddVertices.size(); i++)
         {
             auto odd_j = oddVertices;
@@ -263,12 +268,18 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
 			//defining local minimum
             MinOMP minimum_omp;
 			vector<vector<pair<uint16_t, uint16_t>>> final_tmp;
+            begin = std::chrono::system_clock::now();
 			#pragma omp parallel
         	{
-
 			#pragma omp single
             final_tmp = listPairsCombinations(odd_j);
+            }
+            end = std::chrono::system_clock::now();
+            time_final_tmp += end - begin;
 
+            begin = std::chrono::system_clock::now();
+            #pragma omp parallel
+        	{
         	#pragma omp for schedule(guided) reduction(minimum:minimum_omp)
             for (uint32_t j = 0; j < final_tmp.size(); j++)
             { //verificar se o melhor
@@ -280,6 +291,8 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
                 }
             }
 			}
+            end = std::chrono::system_clock::now();
+            time_foor_loop += end - begin;
 
             //defining global minimum
             if (minimum_omp.distance < min_distance)
@@ -291,6 +304,7 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
                 min_distance = minimum_omp.distance;
             }
         }
+        cout << time_final_tmp.count() << "\t" << time_foor_loop.count() << "\t";
     }
     return final;
 }
