@@ -1,6 +1,6 @@
 path="results-pc-ufsc/par/v2_s_vs_g"
 header="n_odds\tisEulerian\tlistPairs\ttime_tmp\ttime_for\tlistPairsCombinationsBase\tmodifyGraph\thierholzer\ttotal_time\ttotal_distance\tpath\n"
-min_seq=10
+min_seq=8
 
 mkdir -p $path
 
