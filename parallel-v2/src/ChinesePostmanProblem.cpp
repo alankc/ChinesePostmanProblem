@@ -280,7 +280,13 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
             begin = std::chrono::system_clock::now();
             #pragma omp parallel
         	{
+#if defined(GUIDED)
         	#pragma omp for schedule(guided) reduction(minimum:minimum_omp)
+#elif defined(STATIC)
+            #pragma omp for schedule(static) reduction(minimum:minimum_omp)
+#else
+            #pragma omp for schedule(guided) reduction(minimum:minimum_omp)
+#endif            
             for (uint32_t j = 0; j < final_tmp.size(); j++)
             { //verificar se o melhor
                 uint16_t total_distance = distances[first][second] + distancePairCombination(final_tmp[j], distances);
