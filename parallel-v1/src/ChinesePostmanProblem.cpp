@@ -231,7 +231,7 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
 #elif defined(STATIC)
         #pragma omp for schedule(static) reduction(minimum:minimum_omp)
 #else   
-        #pragma omp for schedule(dynamic,1) reduction(minimum:minimum_omp)    
+        #pragma message "USE OPTION -DDYNAMIC or -DSTATIC"    
 #endif        
         for (uint16_t i = 0; i < oddVertices_size; i++)
         {

@@ -285,7 +285,7 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
 #elif defined(STATIC)
             #pragma omp for schedule(static) reduction(minimum:minimum_omp)
 #else
-            #pragma omp for schedule(guided) reduction(minimum:minimum_omp)
+            #pragma message "USE OPTION -DGUIDED or -DSTATIC"
 #endif            
             for (uint32_t j = 0; j < final_tmp.size(); j++)
             { //verificar se o melhor
