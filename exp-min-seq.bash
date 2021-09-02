@@ -1,3 +1,5 @@
+printf "\n***** exp-min-seq *****\n"
+
 root="results-g5/par/v2_min_seq"
 header="n_odds\tisEulerian\tlistPairs\ttime_tmp\ttime_for\tlistPairsCombinationsBase\tmodifyGraph\thierholzer\ttotal_time\ttotal_distance\tpath\n"
 
@@ -19,7 +21,7 @@ do
     printf "$header" >> $path/20odd.txt
     for i in {1..50}
     do
-        printf "$min_seq cpp_sequential-%d\n" $i
+        printf "$min_seq cpp_parallel_v2-%d\n" $i
         taskset --cpu-list 0-5 sudo -S <<< "281094" nice -n -19 ./cpp_parallel_v2 0 1 $min_seq >> $path/6odd.txt
         taskset --cpu-list 0-5 sudo -S <<< "281094" nice -n -19 ./cpp_parallel_v2 1 0 $min_seq >> $path/10odd.txt
         taskset --cpu-list 0-5 sudo -S <<< "281094" nice -n -19 ./cpp_parallel_v2 2 0 $min_seq >> $path/16odd.txt
