@@ -5,7 +5,7 @@ mkdir -p $path
 
 export OMP_NUM_THREADS=4
 
-printf "\nCompilling-Static\n"
+printf "\nCompilling-Static-V1\n"
 rm -f cpp_par_v1
 g++ common/src/* parallel-v1/src/* -o cpp_par_v1 -fopenmp -O2 -DSTATIC
 
@@ -16,7 +16,7 @@ do
     taskset --cpu-list 0-3 sudo -S <<< "0894" nice -n -19 ./cpp_par_v1 2 2 >> $path/static.txt
 done
 
-printf "\nCompilling-Dynamic\n"
+printf "\nCompilling-Dynamic-V1\n"
 rm -f cpp_par_v1
 g++ common/src/* parallel-v1/src/* -o cpp_par_v1 -fopenmp -O2 -DDYNAMIC
 

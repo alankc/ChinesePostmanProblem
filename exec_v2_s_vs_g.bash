@@ -6,7 +6,7 @@ mkdir -p $path
 
 export OMP_NUM_THREADS=4
 
-printf "\nCompilling-Static\n"
+printf "\nCompilling-Static-V2\n"
 rm -f cpp_par_v2
 g++ common/src/* parallel-v2/src/* -o cpp_par_v2 -fopenmp -O2 -DSTATIC
 
