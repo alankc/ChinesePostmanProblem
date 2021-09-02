@@ -7,9 +7,9 @@ printf "\nCompilling-cpp_sequential-V1\n"
 rm -f cpp_sequential
 g++ common/src/* sequential/src/* -o cpp_sequential -O2
 
-printf "$header" >> $path/18odd.txt
+printf "$header" >> $path/20odd.txt
 for i in {1..50}
 do
     printf "cpp_sequential-%d\n" $i
-    taskset --cpu-list 0 ./cpp_sequential 2 1 >> $path/18odd.txt
+    nohup taskset --cpu-list 0 ./cpp_sequential 2 2 >> $path/20odd.txt
 done
