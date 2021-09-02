@@ -11,5 +11,5 @@ printf "$header" >> $path/20odd.txt
 for i in {1..50}
 do
     printf "cpp_sequential-%d\n" $i
-    nohup taskset --cpu-list 0 ./cpp_sequential 2 2 >> $path/20odd.txt
+    taskset --cpu-list 0 ./cpp_sequential 2 2 >> $path/20odd.txt
 done
