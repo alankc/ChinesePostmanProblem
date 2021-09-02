@@ -1,4 +1,4 @@
-path="results-g5/sequential"
+path="results-g5/seq"
 header="n_odds\tisEulerian\tlistPairs\ttime_tmp\ttime_for\tlistPairsCombinationsBase\tmodifyGraph\thierholzer\ttotal_time\ttotal_distance\tpath\n"
 
 mkdir -p $path
