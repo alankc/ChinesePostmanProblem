@@ -13,6 +13,8 @@ g++ common/src/* parallel-v1/src/* -o cpp_parallel_v1_d -O2 -DDYNAMIC
 
 printf "$header" >> $path/static.txt
 printf "$header" >> $path/dynamic.txt
+
+export OMP_NUM_THREADS=6
 for i in {1..50}
 do
     printf "cpp_parallel_v1(s vs d)-%d\n" $i
