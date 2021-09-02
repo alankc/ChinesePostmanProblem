@@ -3,7 +3,7 @@ header="n_odds\tisEulerian\tlistPairs\ttime_tmp\ttime_for\tlistPairsCombinations
 
 printf "\nCompilling-cpp_parallel_v2\n"
 rm -f cpp_parallel_v2
-g++ common/src/* parallel-v2/src/* -o cpp_parallel_v2 -O2
+g++ common/src/* parallel-v2/src/* -o cpp_parallel_v2 -O2 -DGUIDED
 
 for min_seq in 6 8 10 12
 do
