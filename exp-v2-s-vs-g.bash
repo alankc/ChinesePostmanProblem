@@ -25,14 +25,14 @@ printf "$header" >> $path/static_20odd.txt
 export OMP_NUM_THREADS=6
 for i in {1..50}
 do
-    printf "18odd-cpp_parallel_v1(s vs g)-%d\n" $i
+    printf "18odd-exp-v2-s-vs-g-$i\n"
     taskset --cpu-list 0-5 sudo -S <<< "281094" nice -n -19 ./cpp_parallel_v2_s 2 1 $min_seq >> $path/static_18odd.txt
     #taskset --cpu-list 0-5 sudo -S <<< "281094" nice -n -19 ./cpp_parallel_v2_g 2 1 $min_seq >> $path/guided_18odd.txt
 done
 
 for i in {1..50}
 do
-    printf "20odd-cpp_parallel_v1(s vs g)-%d\n" $i
+    printf "20odd-exp-v2-s-vs-g-$i\n"
     taskset --cpu-list 0-5 sudo -S <<< "281094" nice -n -19 ./cpp_parallel_v2_s 2 2 $min_seq >> $path/static_20odd.txt
     #taskset --cpu-list 0-5 sudo -S <<< "281094" nice -n -19 ./cpp_parallel_v2_g 2 2 $min_seq >> $path/guided_20odd.txt
 done
