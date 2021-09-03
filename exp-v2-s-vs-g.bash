@@ -10,12 +10,12 @@ min_seq=8
 
 printf "\nCompilling-cpp_parallel_v2_s\n"
 rm -f cpp_parallel_v2_s
-g++ common/src/* parallel-v2/src/* -o cpp_parallel_v2_s -O2 -DSTATIC
+g++ common/src/* parallel-v2/src/* -o cpp_parallel_v2_s -fopenmp -O2 -DSTATIC
 
 #o guiado posso usar do min-seq
 #printf "\nCompilling-cpp_parallel_v2_g\n"
 #rm -f cpp_parallel_v2_g
-#g++ common/src/* parallel-v2/src/* -o cpp_parallel_v2_g -O2 -DGUIDED
+#g++ common/src/* parallel-v2/src/* -o cpp_parallel_v2_g -fopenmp -O2 -DGUIDED
 
 printf "$header" >> $path/static_18odd.txt
 #printf "$header" >> $path/guided_18odd.txt

@@ -14,7 +14,7 @@ printf "$header" >> $path/10odd.txt
 printf "$header" >> $path/16odd.txt
 printf "$header" >> $path/18odd.txt
 printf "$header" >> $path/20odd.txt
-for i in {1..50}
+for i in {1..30}
 do
     printf "exp-sequential-$i\n"
     taskset --cpu-list 0 sudo -S <<< "281094" nice -n -19 ./cpp_sequential 0 1 >> $path/6odd.txt

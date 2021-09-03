@@ -7,11 +7,11 @@ mkdir -p $path
 
 printf "\nCompilling-cpp_parallel_v1_s\n"
 rm -f cpp_parallel_v1_s
-g++ common/src/* parallel-v1/src/* -o cpp_parallel_v1_s -O2 -DSTATIC
+g++ common/src/* parallel-v1/src/* -o cpp_parallel_v1_s -fopenmp -O2 -DSTATIC
 
 printf "\nCompilling-cpp_parallel_v1_d\n"
 rm -f cpp_parallel_v1_d
-g++ common/src/* parallel-v1/src/* -o cpp_parallel_v1_d -O2 -DDYNAMIC
+g++ common/src/* parallel-v1/src/* -o cpp_parallel_v1_d -fopenmp -O2 -DDYNAMIC
 
 printf "$header" >> $path/static.txt
 printf "$header" >> $path/dynamic.txt

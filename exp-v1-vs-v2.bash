@@ -9,11 +9,11 @@ mkdir -p $path_v2
 
 printf "\nCompilling-cpp_parallel_v1\n"
 rm -f cpp_parallel_v1
-g++ common/src/* parallel-v1/src/* -o cpp_parallel_v1 -O2 -DDYNAMIC #preencher
+g++ common/src/* parallel-v1/src/* -o cpp_parallel_v1 -fopenmp -O2 -DDYNAMIC #preencher
 
 printf "\nCompilling-cpp_parallel_v2\n"
 rm -f cpp_parallel_v2
-g++ common/src/* parallel-v2/src/* -o cpp_parallel_v2 -O2 -DGUIDED #preencher
+g++ common/src/* parallel-v2/src/* -o cpp_parallel_v2 -fopenmp -O2 -DGUIDED #preencher
 
 num_seq=8 #preencher
 
