@@ -5,7 +5,7 @@ header="n_odds\tisEulerian\tlistPairs\tlistPairsCombinationsBase\tmodifyGraph\th
 
 mkdir -p $path
 
-reps=1
+reps=25
 threads=20
 
 printf "\nCompilling-cpp_parallel_v1-exp-tesla-v1\n"
