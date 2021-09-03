@@ -19,7 +19,7 @@ printf "$header" >> $path/dynamic.txt
 export OMP_NUM_THREADS=6
 for i in {1..50}
 do
-    printf "cpp_parallel_v1(s vs d)-%d\n" $i
+    printf "exp-v1-s-vs-d-$i\n"
     taskset --cpu-list 0-5 sudo -S <<< "281094" nice -n -19 ./cpp_parallel_v1_s 2 1 >> $path/static.txt
     taskset --cpu-list 0-5 sudo -S <<< "281094" nice -n -19 ./cpp_parallel_v1_d 2 1 >> $path/dynamic.txt
 done
