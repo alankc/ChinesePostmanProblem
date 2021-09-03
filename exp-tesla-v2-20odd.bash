@@ -5,7 +5,7 @@ header="n_odds\tisEulerian\tlistPairs\ttime_tmp\ttime_for\tlistPairsCombinations
 
 mkdir -p $path
 
-reps=50
+reps=1
 threads=20
 min_seq=8
 
