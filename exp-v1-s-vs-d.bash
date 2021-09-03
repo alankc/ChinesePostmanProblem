@@ -1,3 +1,5 @@
+printf "\n***** exp-v1-s-vs-d *****\n"
+
 path="results-g5/par/v1_s_vs_d"
 header="n_odds\tisEulerian\tlistPairs\tlistPairsCombinationsBase\tmodifyGraph\thierholzer\ttotal_time\ttotal_distance\tpath\n"
 
