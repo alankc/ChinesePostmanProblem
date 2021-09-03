@@ -10,7 +10,7 @@ threads=20
 min_seq=8
 
 printf "\nCompilling-cpp_parallel_v2-exp-tesla-v2\n"
-rm -f cpp_parallel_v2_s
+rm -f cpp_parallel_v2
 g++ common/src/* parallel-v2/src/* -o cpp_parallel_v2 -fopenmp -O2 -DGUIDED
 
 for ((t=2; t<=$threads; t=t+2))
