@@ -23,7 +23,7 @@ do
 	taskset --cpu-list 0-$core ./cpp_parallel_v2 2 2 $min_seq >> $path/"$t"_th.txt
 done
 
-for ((t=17; t<=$threads; t=t+2))
+for ((t=18; t<=$threads; t=t+2))
 do
 	let core=$t-1
 	export OMP_NUM_THREADS=$t
