@@ -58,23 +58,28 @@ void Multigraph::addVertex(Vertex_t &vertex)
 }
 
 void Multigraph::addEdge(Edge_t &edge)
-{
+{   
+    //updates weight in edges
     adjacencyMatrix[edge.from][edge.to] = edge.weight;
     adjacencyMatrix[edge.to][edge.from] = edge.weight;
+    //add neighbors
     neighbors[edge.from].insert(edge.to);
     neighbors[edge.to].insert(edge.from);
 }
 
 void Multigraph::addEdge(uint16_t from, uint16_t to)
 {
+    //just add a neighbor. used to duplicate edges
     neighbors[from].insert(to);
     neighbors[to].insert(from);
 }
 
 void Multigraph::addEdge(uint16_t from, uint16_t to, uint16_t weight)
 {
+    //updates weight in edges
     adjacencyMatrix[from][to] = weight;
     adjacencyMatrix[to][from] = weight;
+    //add neighbors
     neighbors[from].insert(to);
     neighbors[to].insert(from);
 }
@@ -90,9 +95,11 @@ void Multigraph::addVertices(vector<Vertex_t> &newVertices)
     uint16_t newSize = adjacencyMatrix.size() + newVertices.size();
     adjacencyMatrix.resize(newSize);
 
+    //set infinity in new coluns
     for (uint16_t i = 0; i < last; i++)
         adjacencyMatrix[i].resize(newSize, Multigraph::INFINITY);
 
+    //set infinity in new lines
     for (uint16_t i = last; i < newSize; i++)
     {
         adjacencyMatrix[i].resize(newSize, Multigraph::INFINITY);
@@ -107,8 +114,10 @@ void Multigraph::addEdges(vector<Edge_t> &edges)
 {
     for (auto &edge : edges)
     {
+        //update weight in edges
         adjacencyMatrix[edge.from][edge.to] = edge.weight;
         adjacencyMatrix[edge.to][edge.from] = edge.weight;
+        //add neighbors
         neighbors[edge.from].insert(edge.to);
         neighbors[edge.to].insert(edge.from);
     }
@@ -129,6 +138,8 @@ bool Multigraph::isEulerian(vector<uint16_t> &oddVertices)
     bool tst = true;
     for (uint16_t i = 0; i < neighbors.size(); i++)
     {
+        //if the vertex has neighbors and the number of neighbors is odd
+        //add to the list of odd vertices
         if ((neighbors[i].size() > 0) && !(neighbors[i].size() % 2 == 0))
         {
             tst = false;
@@ -159,12 +170,16 @@ bool Multigraph::dijkstra(uint16_t start, uint16_t end, list<uint16_t> &outputPa
         pq.pop();
         visited[best.second] = true;
 
+        //when usgin stl, if the best the the priority queue) has value diferent of the vector of distances it is out of date
+        //therefore just pop it
         if (best.first == distance[best.second])
         {
+            //if found the end can stop
             if (best.second == end)
             {
                 uint16_t curr = end;
                 totalDistance = 0;
+                //geting path e distance in the path
                 while (curr != start)
                 {
                     outputPath.push_front(curr);
@@ -194,6 +209,8 @@ bool Multigraph::dijkstra(uint16_t start, uint16_t end, list<uint16_t> &outputPa
     return false;
 }
 
+//structures to use fibonacci_heap
+//the heap are ordered by distance
 #include <boost/heap/fibonacci_heap.hpp>
 struct node_heap
 {
@@ -218,6 +235,7 @@ bool Multigraph::dijkstra_boost(uint16_t start, uint16_t end, list<uint16_t> &ou
     vector<uint16_t> distance(vertices.size(), Multigraph::INFINITY);
     vector<int32_t> ancester(vertices.size(), -1);
     vector<bool> visited(vertices.size(), false);
+    //variable used to update vertices in the priority queue
     vector<handle_t> nodeHandle;
 
     for (uint16_t i = 0; i < vertices.size(); i++)
@@ -238,10 +256,12 @@ bool Multigraph::dijkstra_boost(uint16_t start, uint16_t end, list<uint16_t> &ou
         fh.pop();
         visited[best.vertex] = true;
 
+        //if reach the end vertex the algorithm can stop
         if (best.vertex == end)
         {
             uint16_t curr = end;
             totalDistance = 0;
+            //geting path e distance in the path
             while (curr != start)
             {
                 outputPath.push_front(curr);
