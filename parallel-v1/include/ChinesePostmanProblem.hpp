@@ -36,7 +36,7 @@ private:
      * The first element (a,b)- are the vertices first and second removed from oddVertices before call listPairsCombinations
      * listPairsCombinations then return the sets -(x,y)(z,w)
      * 
-     * Paralelization: iterations are divided among threads
+     * Parallelization: iterations are divided among threads
      * 
      * 
      * Example with 2 threads:
