@@ -18,17 +18,17 @@
 
 [exp-g5-all.bash](exp-g5-all.bash):
 
-[exp-g5-min-seq.bash](exp-g5-min-seq.bash):
-
 [exp-g5-sequential.bash](exp-g5-sequential.bash):
-
-[exp-g5-threads.bash](exp-g5-threads.bash):
 
 [exp-g5-v1-s-vs-d.bash](exp-g5-v1-s-vs-d.bash):
 
-[exp-g5-v1-vs-v2.bash](exp-g5-v1-vs-v2.bash):
+[exp-g5-min-seq.bash](exp-g5-min-seq.bash):
 
 [exp-g5-v2-s-vs-g.bash](exp-g5-v2-s-vs-g.bash):
+
+[exp-g5-v1-vs-v2.bash](exp-g5-v1-vs-v2.bash):
+
+[exp-g5-threads.bash](exp-g5-threads.bash):
 
 
 ## Experiments in Tesla computer (Computer B)
