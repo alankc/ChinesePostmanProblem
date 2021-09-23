@@ -41,36 +41,36 @@ private:
      *  (0,1)-(2,3)(4,5)
      *  (0,1)-(2,4)(3,5)
      *  (0,1)-(2,5)(3,4)
-     *  localBestSet  = (0,1)(2,4)(3,5)
-     *  globalBestset = (0,1)(2,4)(3,5)
+     *  localBestSet  = (0,1)(2,4)(3,5) cost = 5
+     *  globalBestset = (0,1)(2,4)(3,5) cost = 5
      *
      *  Iteration 2 
      *  (0,2)-(1,3)(4,5)
      *  (0,2)-(1,4)(3,5)
      *  (0,2)-(1,5)(3,4)
-     *  localBestSet  = (0,2)(1,4)(3,5)
-     *  globalBestset = (0,1)(2,4)(3,5)
+     *  localBestSet  = (0,2)(1,4)(3,5) cost = 6
+     *  globalBestset = (0,1)(2,4)(3,5) cost = 5
      *
      *  Iteration 3
      *  (0,3)-(1,2)(4,5)
      *  (0,3)-(1,4)(2,5)
      *  (0,3)-(1,5)(2,4)
-     *  localBestSet  = (0,3)(1,5)(2,4)
-     *  globalBestset = (0,3)(1,5)(2,4)
+     *  localBestSet  = (0,3)(1,5)(2,4) cost = 3
+     *  globalBestset = (0,3)(1,5)(2,4) cost = 3
      *
      *  Iteration 4 
      *  (0,4)-(1,2)(3,5)
      *  (0,4)-(1,3)(2,5)
      *  (0,4)-(1,5)(2,3)
-     *  localBestSet  = (0,4)(1,2)(3,5)
-     *  globalBestset = (0,3)(1,5)(2,4)
+     *  localBestSet  = (0,4)(1,2)(3,5) cost = 10
+     *  globalBestset = (0,3)(1,5)(2,4) cost = 3
      *  
      *  Iteration 5 
      *  (0,5)-(1,2)(3,4)
      *  (0,5)-(1,3)(2,4)
      *  (0,5)-(1,4)(2,3)
-     *  localBestSet  = (0,5)(1,2)(3,4)
-     *  globalBestset = (0,3)(1,5)(2,4)
+     *  localBestSet  = (0,5)(1,2)(3,4) cost = 3
+     *  globalBestset = (0,3)(1,5)(2,4) cost = 3
      * 
      * return globalBestset
     **/
