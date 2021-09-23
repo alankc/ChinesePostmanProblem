@@ -25,6 +25,10 @@ void ChinesePostmanProblem::listPairs(vector<uint16_t> &oddVertices, vector<vect
     {
         for (uint16_t j = i + 1; j < oddVertices.size(); j++)
         {
+            //defining the elements of the pair of vertices
+            //Now the identifier from each odd vertices don't matter anymore.
+            //Note that in distances and paths it uses i and j
+            //this way is more simple to index the distance matrix 
             pair<uint16_t, uint16_t> p;
             p.first = i;
             p.second = j;
@@ -32,11 +36,15 @@ void ChinesePostmanProblem::listPairs(vector<uint16_t> &oddVertices, vector<vect
             uint16_t distance;
             list<uint16_t> path;
 
+            //getting the path and distance between the vertices
+            //using i and j to get the id of the odd vertices and send to Dijkstra
             mg->dijkstra_boost(oddVertices[i], oddVertices[j], path, distance);
 
+            //saving the distance between the vertices
             distances[i][j] = distance;
             distances[j][i] = distance;
 
+            //saving the path between the vertices
             paths[i].insert(make_pair(j, path));
         }
     }
@@ -45,6 +53,7 @@ void ChinesePostmanProblem::listPairs(vector<uint16_t> &oddVertices, vector<vect
 vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombinations(vector<uint16_t> &oddVertices)
 {
     vector<vector<pair<uint16_t, uint16_t>>> final;
+    //if there are just two odd vertices, return them as the pairs combinations
     if (oddVertices.size() == 2)
     {
         vector<pair<uint16_t, uint16_t>> buffer;
@@ -53,16 +62,23 @@ vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombina
     }
     else
     {
+        //erase the first vertex
         uint16_t first = *oddVertices.begin();
         oddVertices.erase(oddVertices.begin());
 
+        //to the rest of vertices, for each one, removed it and call
+        //the listPairsCombinations without these two vertices
         for (uint16_t i = 0; i < oddVertices.size(); i++)
         {
+            //reset odd_j with oddvertices without first
             auto odd_j = oddVertices;
             uint16_t second = oddVertices[i];
+            //erase the vertex i from odd_j
             odd_j.erase(odd_j.begin() + i);
 
+            //call listPairsCombinations passing odd_j. Get the solution to oddVertices without first and second
             auto final_tmp = listPairsCombinations(odd_j);
+            //use the solution to create bigger solution ways starting with (first, second)
             for (auto &el : final_tmp)
             {
                 vector<pair<uint16_t, uint16_t>> buffer;
@@ -75,6 +91,7 @@ vector<vector<pair<uint16_t, uint16_t>>> ChinesePostmanProblem::listPairsCombina
     return final;
 }
 
+//Deprecated function. It was used in the initial work. But due to memory, it was not used in the final work.
 vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::bestPairsCombination(vector<vector<pair<uint16_t, uint16_t>>> &pairCombinations, vector<vector<uint16_t>> &distances)
 {
     uint16_t min_value = numeric_limits<uint16_t>::max();
@@ -97,6 +114,7 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::bestPairsCombination(vec
 
 void ChinesePostmanProblem::modifyGraph(vector<pair<uint16_t, uint16_t>> &bestPairs, vector<map<uint16_t, list<uint16_t>>> &paths)
 {
+    //for each pair in best pairs
     for (auto p : bestPairs)
     {
         //if something wrong, it will result in a Segmentation fault
@@ -107,6 +125,7 @@ void ChinesePostmanProblem::modifyGraph(vector<pair<uint16_t, uint16_t>> &bestPa
         uint16_t last = *it_list;
         it_list++;
 
+        //duplicate edges in the path between the vertices in p
         while (it_list != it->second.end())
         {
             curr = *it_list;
@@ -117,6 +136,7 @@ void ChinesePostmanProblem::modifyGraph(vector<pair<uint16_t, uint16_t>> &bestPa
     }
 }
 
+//Deprecated function. 
 void ChinesePostmanProblem::solve(Multigraph *mg, uint16_t startVertex)
 {
     this->mg = mg;
@@ -188,6 +208,7 @@ void ChinesePostmanProblem::solve(Multigraph *mg, uint16_t startVertex)
     cout << endl;
 }
 
+//Structs used in the reduction of OpenMP
 struct MinOMP
 {
     uint16_t distance;
@@ -199,6 +220,7 @@ struct MinOMP
     }
 };
 
+//returns the one with smaller distance
 MinOMP MinOMPCompare(MinOMP& a, MinOMP& b) 
 {
     return a.distance < b.distance ? a : b;
@@ -208,6 +230,7 @@ MinOMP MinOMPCompare(MinOMP& a, MinOMP& b)
 
 vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBase(vector<uint16_t> &oddVertices, vector<vector<uint16_t>> &distances)
 {
+    //If there are just two vertices, they are the best solution
     if (oddVertices.size() == 2)
     {
         vector<pair<uint16_t, uint16_t>> result;
@@ -216,6 +239,8 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
     }
     else
     {
+        //works analogously to listPairsCombinations
+        //But here, it made just the first call and listPairsCombinations make recursively calls
         uint16_t first = *oddVertices.begin();
         oddVertices.erase(oddVertices.begin());
 
@@ -224,6 +249,7 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
         MinOMP minimum_omp;
         minimum_omp.distance = numeric_limits<uint16_t>::max();
 
+        //defining parallelization (compiling option -DYNAMIC or -DSTATIC)
         #pragma omp parallel
         {
 #if defined(DYNAMIC)      
@@ -239,13 +265,22 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
             uint16_t second = oddVertices[i];
             odd_j.erase(odd_j.begin() + i);
 
+            //getting a set o pairs combinations
+            //for instance, for oddVertices = {1,2,3,4,5,6}
+            //first = 1, and second = 2
+            //the result: {(3,4)(5,6)}, {(3,5)(4,6)}, {(3,6)(4,5)}
             auto final_tmp = listPairsCombinations(odd_j);
 
             //defining local minimum
+            //Here (1,2) or (first, second) is considered in the solution, then, the result: 
+            //{(1,2)(3,4)(5,6)}, {(1,2)(3,5)(4,6)}, {(1,2)(3,6)(4,5)}
             uint32_t min_id = 0;
             uint16_t min_distance_local = numeric_limits<uint16_t>::max();
             for (uint32_t j = 0; j < final_tmp.size(); j++)
-            { //verificar se o melhor
+            { //searchs the best
+                //example, computing distace: 
+                //total_distance=distance(1,2) + distance({(3,4)(5,6)})
+                //total_distance=distance(1,2) + distance(3,4) + distance(5,6)
                 uint16_t total_distance = distances[first][second] + distancePairCombination(final_tmp[j], distances);
                 if (total_distance < min_distance_local)
                 {
@@ -255,6 +290,7 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
             }
 
             //defining global minimum
+            //if this solution is better, it saves it
             if (min_distance_local < minimum_omp.distance)
             {
                 minimum_omp.pairs.clear();
@@ -285,6 +321,7 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint16_t startVertex)
     this->mg = mg;
     vector<uint16_t> oddVertices;
 
+    //verifying if the graph is eulerian
     auto start = std::chrono::system_clock::now();
     bool tst = mg->isEulerian(oddVertices);
     auto end = std::chrono::system_clock::now();
@@ -297,6 +334,7 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint16_t startVertex)
 
     if (!tst)
     {
+        //listing pairs. Generating variables of distances and paths between pairs.
         vector<vector<uint16_t>> distances;
         vector<map<uint16_t, list<uint16_t>>> paths;
         start = std::chrono::system_clock::now();
@@ -306,7 +344,10 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint16_t startVertex)
         total_elapsed += elapsed_2;
         cout << elapsed_2.count() << "\t";
 
+        //Getting the best pairs combination. Also known as matching in graphs
         vector<uint16_t> vec(oddVertices.size());
+        //generating a vector from 0 to oddVertices.size() - 1;
+        //remember, variables "distances" and "paths" have index from 0 to oddVertices.size() - 1
         std::iota(vec.begin(), vec.end(), 0);
         start = std::chrono::system_clock::now();
         vector<pair<uint16_t, uint16_t>> bestPairs = listPairsCombinationsBase(vec, distances);
@@ -315,6 +356,7 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint16_t startVertex)
         total_elapsed += elapsed_3;
         cout << elapsed_3.count() << "\t";
 
+        //Adding extra edges to make it possible Hierholzer get the eulerian cycle
         start = std::chrono::system_clock::now();
         modifyGraph(bestPairs, paths);
         end = std::chrono::system_clock::now();
@@ -323,6 +365,7 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint16_t startVertex)
         cout << elapsed_4.count() << "\t";
     }
 
+    //Running Hierholzer to get the eulerian cycle
     uint16_t distance;
     list<uint16_t> path;
     start = std::chrono::system_clock::now();
@@ -336,6 +379,7 @@ void ChinesePostmanProblem::solve_v2(Multigraph *mg, uint16_t startVertex)
 
     cout << distance << "\t";
 
+    //printing the path
     cout << "P:";
     for (auto v : path)
     {
