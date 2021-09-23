@@ -252,6 +252,9 @@ vector<pair<uint16_t, uint16_t>> ChinesePostmanProblem::listPairsCombinationsBas
             begin = std::chrono::system_clock::now();
             for (uint32_t j = 0; j < final_tmp.size(); j++)
             { //searchs the best
+                //example, computing distace: 
+                //total_distance=distance(1,2) + distance({(3,4)(5,6)})
+                //total_distance=distance(1,2) + distance(3,4) + distance(5,6)
                 uint16_t total_distance = distances[first][second] + distancePairCombination(final_tmp[j], distances);
                 if (total_distance < min_distance_local)
                 {
