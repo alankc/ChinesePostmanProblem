@@ -1,5 +1,11 @@
 # Chinese Postman Problem (CPP)
 
+The Chinese Postman Problem (CPP) is a classic coverage problem that has several applications. This paper presents two parallel implementations (V1 and V2) that use brute force to solve the CPP. These versions reached up to 4 times speedup compared to the sequential one. However, experiments in a computer with NUMA architecture had results significantly worse than the computer with UMA. Further studies are needed to explain the cause of these results.
+
+More datils in the file: [preliminary article.pdf](preliminary_article.pdf)
+
+**Description of folders**:
+
 [common](common): files used in both sequential and parallel versions
 
 [sequential](sequential): sequential version of the CPP solver
